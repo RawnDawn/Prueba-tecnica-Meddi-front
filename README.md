@@ -22,6 +22,8 @@ Las tareas creadas deben tener como mínimo los siguientes campos:
 - Fecha de vencimiento
 - Estado (Pendiente, Completada)
 
+Debes trabajar partiendo de la ruta /tasksManager
+
 ## Requisitos
 
 - Puedes utilizar solo las dependencias que se encuentran instaladas en este proyecto
