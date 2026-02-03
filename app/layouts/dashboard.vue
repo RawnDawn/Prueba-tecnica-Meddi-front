@@ -20,8 +20,8 @@ const items = ref([
     icon: Home,
   },
   {
-    title: 'Identificación de Burnout',
-    url: '/BurnoutIdentification',
+    title: 'Administrador de tareas',
+    url: '/taskManager',
     icon: Flame,
   },
   {
