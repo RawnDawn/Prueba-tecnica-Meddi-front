@@ -1,75 +1,67 @@
-# Nuxt Minimal Starter
+### Prueba técnica para Meddi
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Objetivo
 
-## Setup
+Desarrollar una interfaz de usuario para una aplicación web que permita gestionar tareas (CRUD) con las siguientes funcionalidades:
 
-Make sure to install dependencies:
+- Crear tareas
+- Editar tareas
+- Eliminar tareas
+- Marcar tareas como completadas
+- Filtrar tareas por prioridad
+- Agrupar tareas por prioridad (Una lista por prioridad)
+- Filtrar tareas por fecha de creación
+- Ordenar tareas por fecha de creación
 
-```bash
-# npm
-npm install
+Las tareas creadas deben tener como mínimo los siguientes campos:
+- id (_id de MongoDB)
+- Titulo
+- Descripción
+- Prioridad (Baja, Media, Alta)
+- Fecha de creación
+- Fecha de vencimiento
+- Estado (Pendiente, Completada)
 
-# pnpm
-pnpm install
+## Requisitos
 
-# yarn
-yarn install
+- Puedes utilizar solo las dependencias que se encuentran instaladas en este proyecto
+- Utilizar TypeScript
+- Utilizar Tailwind CSS
+- Utilizar Pinia
+- Manejo de fechas (dayjs o nativo)
+- Utilizar Lucide Icons
+- Utilizar Shadcn UI
+- Utilizar Vue 3 composition API
+- Utilizar Nuxt 4 (No hay mucho que configurar, solo se requiere entender el proyecto)
 
-# bun
-bun install
-```
+## Puntos a evaluar
 
-## Development Server
+- Clean code
+- Uso básico de typescript
+- Manipulación de datos con javascript
+- Manejo de asincronía
+- Uso de vue 3 composition API
+- Uso de tailwind css
+- Uso de pinia
+- Desarrollo de componentes limpios y reutilizables
+- Uso adecuado de reactividad
+- Manejo del ciclo de vida de los componentes
+- Manejo de errores
+- Manejo de formularios
+- Manejo de validaciones
+- Uso de composables para reutilizar código
 
-Start the development server on `http://localhost:3000`:
 
-```bash
-# npm
-npm run dev
+## Puntos extra (deseables, no obligatorios)
 
-# pnpm
-pnpm dev
+- Uso de lucide icons
+- Uso de shadcn ui
+- Dominio de nuxt 4
+- Uso avanzado de typescript
 
-# yarn
-yarn dev
+## Consideraciones
 
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- NO puedes utilizar IA para generar el código, el objetivo es evaluar tu capacidad de resolución de problemas y tu conocimiento de las tecnologías mencionadas.
+- NO puedes instalar más dependencias de las que se encuentran instaladas en este proyecto (a excepción de los componentes de shadcn ui, esos si puedes   instalarlos)
+- NO puedes eliminar archivos del proyecto, solo puedes agregar o modificar archivos (El objetivo es simular un entorno de trabajo real)
+- SI puedes consultar documentación 
