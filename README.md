@@ -73,3 +73,22 @@ Debes trabajar partiendo de la ruta /tasksManager
 - NO puedes instalar más dependencias de las que se encuentran instaladas en este proyecto (a excepción de los componentes de shadcn ui, esos si puedes   instalarlos)
 - NO puedes eliminar archivos del proyecto, solo puedes agregar o modificar archivos (El objetivo es simular un entorno de trabajo real)
 - SI puedes consultar documentación 
+
+
+# Backend
+
+El desarrollo del backend es libre, el objetivo es crear los endpoints necesarios para que el frontend pueda consumir los datos de las tareas.
+
+## Endpoints sugeridos
+
+- GET /tasks - Obtener todas las tareas 
+- GET /tasks/:id - Obtener una tarea por id
+- POST /tasks - Crear una tarea
+- PUT /tasks/:id - Actualizar una tarea
+- DELETE /tasks/:id - Eliminar una tarea
+
+## Conexión a la base de datos
+
+El backend debe conectarse a la base de datos de MongoDB utilizando mongoose.
+
+mongodb+srv://MeddiTest123:MeddiTest123.@checkpoint.lkqypk0.mongodb.net/?appName=checkpoint
