@@ -1,6 +1,7 @@
 import type { Task } from "~/types/task";
 import { API_BASE_URL } from "~/constants/api";
 import type { PaginatedResponse } from "~/types/paginatedResponse";
+import { DEFAULT_ERROR_MESSAGE, TASK_ERROR_MESSAGES, type TaskErrorCode } from "~/constants/taskErrors";
 
 const TASK_URL = API_BASE_URL + "/tasks";
 
@@ -13,7 +14,13 @@ export const getTasks = async (
     const body = await res.json()
 
     if (!res.ok) {
-        throw new Error(body.error || "TASK_SERVICE_ERROR")
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
     }
 
     return body
