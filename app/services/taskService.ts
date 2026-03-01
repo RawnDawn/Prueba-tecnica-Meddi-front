@@ -5,11 +5,43 @@ import { DEFAULT_ERROR_MESSAGE, TASK_ERROR_MESSAGES, type TaskErrorCode } from "
 
 const TASK_URL = API_BASE_URL + "/tasks";
 
+/**
+ * Fetch tasks
+ * @param page 
+ * @param limit 
+ * @returns 
+ */
 export const getTasks = async (
     page = 1,
     limit = 10
 ): Promise<PaginatedResponse<Task[]>> => {
     const res = await fetch(`${TASK_URL}?page=${page}&limit=${limit}`)
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+export const createTask = async (
+    task: Partial<Task>
+) => {
+    const res = await fetch(TASK_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+    })
 
     const body = await res.json()
 

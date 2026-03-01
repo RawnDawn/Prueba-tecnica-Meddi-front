@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { getTasks } from "~/services/taskService"
+import { createTask, getTasks } from "~/services/taskService"
 import type { Task } from "~/types/task"
 
 export const useTaskStore = defineStore('tasks-test', {
@@ -16,6 +16,20 @@ export const useTaskStore = defineStore('tasks-test', {
             try {
                 const res = await getTasks(page)
                 this.tasks = res.data
+            } catch (err: any) {
+                this.error = err.message
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async createTask(task: Partial<Task>) {
+            this.loading = true
+            this.error = null
+
+            try {
+                const res = await createTask(task)
+                this.tasks.push(res.data)
             } catch (err: any) {
                 this.error = err.message
             } finally {

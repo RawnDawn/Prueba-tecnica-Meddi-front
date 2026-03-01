@@ -24,14 +24,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select"
-import { TaskPriority } from "~/types/task";
+import { TaskPriority, type Task } from "~/types/task";
+import {useTaskStore} from "~/stores/taskStore"
 
 const formData = ref({
     title: "",
     description: "",
     priority: "",
-    testSelect: ""
+    dueDate: ""
 });
+
+const store = useTaskStore();
 
 // pivot to set and send prio to formData
 const selectedPriority = ref<TaskPriority | "">("");
@@ -40,7 +43,7 @@ const selectedPriority = ref<TaskPriority | "">("");
 const errors = ref<{ [key: string]: string }>({});
 
 // Submit
-const handleSubmit = () => {
+const handleSubmit = async () => {
     errors.value = {};
 
     // add priority 
@@ -59,7 +62,11 @@ const handleSubmit = () => {
         return;
     }
 
-    console.log("Formulario válido!", result.data);
+    try {
+        await store.createTask(result.data);
+    } catch (error) {
+        console.error("Error: ", error);
+    }
 };
 </script>
 
@@ -124,6 +131,19 @@ const handleSubmit = () => {
 
                         <FieldDescription v-if="errors.priority" class="text-destructive text-sm">
                             {{ errors.priority }}
+                        </FieldDescription>
+                    </Field>
+
+                    <!-- Due date -->
+                    <Field :data-invalid="errors.dueDate">
+                        <Label for="dueDate">
+                            Fecha de vencimiento <span className="text-destructive">*</span>
+                        </Label>
+                        <Input id="dueDate" name="dueDate" required v-model="formData.dueDate" :aria-invalid="errors.dueDate"
+                            :class="errors.dueDate ? 'border-destructive' : ''" />
+
+                        <FieldDescription v-if="errors.dueDate" class="text-destructive text-sm ">
+                            {{ errors.dueDate }}
                         </FieldDescription>
                     </Field>
 

@@ -16,4 +16,6 @@ export const taskSchema = z.object({
         message: 'La Prioridad es obligatorio y debe ser "Baja", "Media" o "Alta"',
     }),
 
+    dueDate: z.string()
+        .optional(),
 });
