@@ -16,11 +16,25 @@ import { Input } from "~/components/ui/input";
 import { ref } from "vue";
 import { taskSchema } from "~/schemas/taskSchema";
 import { Textarea } from "~/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select"
+import { TaskPriority } from "~/types/task";
 
 const formData = ref({
     title: "",
     description: "",
+    priority: "",
+    testSelect: ""
 });
+
+// pivot to set and send prio to formData
+const selectedPriority = ref<TaskPriority | "">("");
 
 // errors
 const errors = ref<{ [key: string]: string }>({});
@@ -28,6 +42,9 @@ const errors = ref<{ [key: string]: string }>({});
 // Submit
 const handleSubmit = () => {
     errors.value = {};
+
+    // add priority 
+    formData.value.priority = selectedPriority.value;
 
     // Validate form
     const result = taskSchema.safeParse(formData.value);
@@ -60,6 +77,7 @@ const handleSubmit = () => {
                 </DialogHeader>
 
                 <FieldGroup class="mb-5">
+                    <!-- Title -->
                     <Field :data-invalid="errors.title">
                         <Label for="title">
                             Titulo <span className="text-destructive">*</span>
@@ -72,20 +90,48 @@ const handleSubmit = () => {
                         </FieldDescription>
                     </Field>
 
+                    <!-- Description -->
                     <Field :data-invalid="errors.description">
                         <Label for="description">Descripción</Label>
                         <Textarea id="description" name="description" v-model="formData.description"
-                            :aria-invalid="errors.description" :class="errors.description ? 'border-destructive' : ''" />
+                            :aria-invalid="errors.description"
+                            :class="errors.description ? 'border-destructive' : ''" />
 
                         <FieldDescription v-if="errors.description" class="text-destructive text-sm ">
                             {{ errors.description }}
-                        </FieldDescription> 
+                        </FieldDescription>
                     </Field>
+
+                    <!-- Prio -->
+                    <Field :data-invalid="errors.priority">
+                        <Label class="mb-3" for="priority">
+                            Prioridad<span className="text-destructive">*</span>
+                        </Label>
+
+                        <Select  @update:model-value="(value) => selectedPriority = value as TaskPriority">
+                            <SelectTrigger :aria-invalid="errors.priority">
+                                <SelectValue placeholder="Selecciona la prioridad" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="low" class="text-green-500">Baja</SelectItem>
+                                    <SelectItem value="medium" class="text-yellow-500">Media</SelectItem>
+                                    <SelectItem value="high" class="text-destructive">Alta</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
+                        <FieldDescription v-if="errors.priority" class="text-destructive text-sm">
+                            {{ errors.priority }}
+                        </FieldDescription>
+                    </Field>
+
                 </FieldGroup>
 
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
+                        <Button as="button" variant="outline">Cancel</Button>
                     </DialogClose>
                     <Button type="submit">Save changes</Button>
                 </DialogFooter>
