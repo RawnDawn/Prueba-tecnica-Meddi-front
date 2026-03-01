@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask, deleteTask } from "~/services/taskService"
-import type { Task } from "~/types/task"
+import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone } from "~/services/taskService"
+import { TaskStatus, type Task } from "~/types/task"
 
 export const useTaskStore = defineStore('tasks-test', {
     state: () => ({
@@ -76,6 +76,46 @@ export const useTaskStore = defineStore('tasks-test', {
                 // Remove task from the list without mutating the original array
                 this.tasks = this.tasks.filter(t => t._id !== id)
                 // await this.fetchTasks()
+            } catch (err: any) {
+                this.error = getTaskErrorMessage(err)
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async markAsDone(id: string) {
+            this.loading = true
+            this.error = null
+
+            try {
+                await markAsDone(id)
+
+                this.tasks = this.tasks.map(t => {
+                    if (t._id === id) {
+                        return { ...t, taskStatus: TaskStatus.DONE }
+                    }
+                    return t
+                })
+            } catch (err: any) {
+                this.error = getTaskErrorMessage(err)
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async markAsPending(id: string) {
+            this.loading = true
+            this.error = null
+
+            try {
+                await markAsDone(id)
+
+                this.tasks = this.tasks.map(t => {
+                    if (t._id === id) {
+                        return { ...t, taskStatus: TaskStatus.DONE }
+                    }
+                    return t
+                })
             } catch (err: any) {
                 this.error = getTaskErrorMessage(err)
             } finally {

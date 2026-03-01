@@ -151,10 +151,42 @@ export const deleteTask = async (
     return;
 }
 
+/**
+ * Mark a task as done
+ * @param id 
+ * @returns 
+ */
 export const markAsDone = async (
     id: string
 ) => {
     const res = await fetch(`${TASK_URL}/${id}/done`, {
+        method: "PUT",
+    })
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
+ * Mark a task as pending
+ * @param id 
+ * @returns 
+ */
+export const markAsPending = async (
+    id: string
+) => {
+    const res = await fetch(`${TASK_URL}/${id}/pending`, {
         method: "PUT",
     })
 
