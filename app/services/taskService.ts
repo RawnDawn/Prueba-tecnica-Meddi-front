@@ -131,21 +131,24 @@ export const deleteTask = async (
 ) => {
     const res = await fetch(`${TASK_URL}/${id}`, {
         method: "DELETE",
-    })
+    });
 
-    const body = await res.json()
+    // No Content, all good
+    if (res.status === 204) {
+        return;
+    }
+
+    const body = await res.json();
 
     if (!res.ok) {
         const errorCode = body.error as TaskErrorCode;
-
         const message =
             TASK_ERROR_MESSAGES[errorCode] ??
             DEFAULT_ERROR_MESSAGE;
-
         throw new Error(message);
     }
 
-    return body
+    return;
 }
 
 export const markAsDone = async (

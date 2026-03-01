@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask } from "~/services/taskService"
+import { createTask, getTasks, showTask, updateTask, deleteTask } from "~/services/taskService"
 import type { Task } from "~/types/task"
 
 export const useTaskStore = defineStore('tasks-test', {
@@ -72,9 +72,10 @@ export const useTaskStore = defineStore('tasks-test', {
             this.error = null
 
             try {
-                const res = await showTask(id)
+                await deleteTask(id)
                 // Remove task from the list without mutating the original array
-                this.tasks.splice(this.tasks.findIndex(t => t._id === id), 1)
+                this.tasks = this.tasks.filter(t => t._id !== id)
+                // await this.fetchTasks()
             } catch (err: any) {
                 this.error = getTaskErrorMessage(err)
             } finally {

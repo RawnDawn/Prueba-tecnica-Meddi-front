@@ -22,6 +22,12 @@ const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 
 const store = useTaskStore()
 
+async function handleOnClick() {
+    console.log('Deleting task with id:', props.id)
+    await store.deleteTask(props.id)
+    emit('update:open', false)
+}
+
 // Manage dialog closing with on top close button
 const localOpen = ref(props.open)
 
@@ -45,7 +51,7 @@ watch(localOpen, val => {
                 <DialogTitle class="text-destructive ">Eliminar tarea</DialogTitle>
                 <Separator />
                 <DialogDescription>
-                    Llena el formulario para actualizar una tarea existente.
+                    ¿Estás seguro de que quieres eliminar esta tarea?
                 </DialogDescription>
             </DialogHeader>
 
@@ -54,7 +60,7 @@ watch(localOpen, val => {
                 <DialogClose asChild v-on:click="emit('update:open', false)">
                     <Button v-on:click="emit('update:open', false)" as="button" variant="outline">Cancelar</Button>
                 </DialogClose>
-                <Button type="submit">Guardar cambios</Button>
+                <Button variant="destructive" @click="handleOnClick">Eliminar tarea</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
