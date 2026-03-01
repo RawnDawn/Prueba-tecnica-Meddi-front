@@ -3,6 +3,7 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -24,8 +25,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select"
-import { TaskPriority, type Task } from "~/types/task";
-import {useTaskStore} from "~/stores/taskStore"
+import { TaskPriority } from "~/types/task";
+import { useTaskStore } from "~/stores/taskStore"
+import DuePicker from "~/components/taskManager/DuePicker.vue";
+
+const store = useTaskStore();
 
 const formData = ref({
     title: "",
@@ -34,10 +38,11 @@ const formData = ref({
     dueDate: ""
 });
 
-const store = useTaskStore();
-
 // pivot to set and send prio to formData
-const selectedPriority = ref<TaskPriority | "">("");
+const selectedPriority = ref<TaskPriority | "low" | "medium" | "high">("medium");
+
+// Get due date from picker
+const dueDate = ref<string>("");
 
 // errors
 const errors = ref<{ [key: string]: string }>({});
@@ -46,8 +51,9 @@ const errors = ref<{ [key: string]: string }>({});
 const handleSubmit = async () => {
     errors.value = {};
 
-    // add priority 
+    // add priority and dueDate
     formData.value.priority = selectedPriority.value;
+    formData.value.dueDate = dueDate.value;
 
     // Validate form
     const result = taskSchema.safeParse(formData.value);
@@ -62,16 +68,43 @@ const handleSubmit = async () => {
         return;
     }
 
-    try {
-        await store.createTask(result.data);
-    } catch (error) {
-        console.error("Error: ", error);
-    }
+    console.log(result.data);
+
+    // try {
+    //     await store.createTask(result.data);
+    // } catch (error) {
+    //     console.error("Error: ", error);
+    // }
 };
+
+/**
+ * Manage dialog open state
+ */
+const open = ref(false)
+
+/**
+ * Clean form when submit or close dialog
+ */
+const resetForm = () => {
+    formData.value = {
+        title: "",
+        description: "",
+        priority: "",
+        dueDate: ""
+    }
+
+    selectedPriority.value = "medium"
+    dueDate.value = ""
+    errors.value = {}
+}
+
+watch(open, (val) => {
+    if (!val) resetForm()
+})
 </script>
 
 <template>
-    <Dialog>
+    <Dialog v-model:open="open">
         <DialogTrigger asChild>
             <Button variant="outline">Nueva tarea</Button>
         </DialogTrigger>
@@ -81,6 +114,9 @@ const handleSubmit = async () => {
                 <DialogHeader class="mb-2">
                     <DialogTitle>Nueva tarea</DialogTitle>
                     <Separator />
+                    <DialogDescription>
+                        Llena el formulario para crear una nueva tarea.
+                    </DialogDescription>
                 </DialogHeader>
 
                 <FieldGroup class="mb-5">
@@ -115,7 +151,8 @@ const handleSubmit = async () => {
                             Prioridad<span className="text-destructive">*</span>
                         </Label>
 
-                        <Select  @update:model-value="(value) => selectedPriority = value as TaskPriority">
+                        <Select default-value="medium"
+                            @update:model-value="(value) => selectedPriority = value as TaskPriority">
                             <SelectTrigger :aria-invalid="errors.priority">
                                 <SelectValue placeholder="Selecciona la prioridad" />
                             </SelectTrigger>
@@ -135,17 +172,31 @@ const handleSubmit = async () => {
                     </Field>
 
                     <!-- Due date -->
-                    <Field :data-invalid="errors.dueDate">
+                    <!-- <Field :data-invalid="errors.dueDate">
                         <Label for="dueDate">
                             Fecha de vencimiento <span className="text-destructive">*</span>
                         </Label>
-                        <Input id="dueDate" name="dueDate" required v-model="formData.dueDate" :aria-invalid="errors.dueDate"
-                            :class="errors.dueDate ? 'border-destructive' : ''" />
+                        <Input id="dueDate" name="dueDate" required v-model="formData.dueDate"
+                            :aria-invalid="errors.dueDate" :class="errors.dueDate ? 'border-destructive' : ''" />
+
+                        <FieldDescription v-if="errors.dueDate" class="text-destructive text-sm ">
+                            {{ errors.dueDate }}
+                        </FieldDescription>
+                    </Field> -->
+
+                    <!-- Due date -->
+                    <Field :data-invalid="errors.dueDate">
+                        <Label for="dueDate">
+                            Fecha de vencimiento test <span className="text-destructive">*</span>
+                        </Label>
+
+                        <DuePicker v-model="dueDate" />
 
                         <FieldDescription v-if="errors.dueDate" class="text-destructive text-sm ">
                             {{ errors.dueDate }}
                         </FieldDescription>
                     </Field>
+
 
                 </FieldGroup>
 

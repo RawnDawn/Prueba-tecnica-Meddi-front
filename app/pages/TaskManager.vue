@@ -63,3 +63,8 @@ await store.fetchTasks();
 
   </GPageContainer>
 </template>
+
+<!-- TODO - See if pinia don't fuck up again -->
+ <!-- TODO - Manage validation errors when you close the dialog -->
+  <!-- TODO - Add loading state when creating task (disable button) -->
+   <!-- TODO - Close dialog and check logic to refresh tasks -->

@@ -12,10 +12,12 @@ export const taskSchema = z.object({
         .string()
         .optional(),
 
-    priority: priorityEnum.refine((val) => [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH].includes(val), {
+    priority: z.string({
         message: 'La Prioridad es obligatorio y debe ser "Baja", "Media" o "Alta"',
     }),
 
-    dueDate: z.string()
-        .optional(),
+    dueDate: z
+        .iso.datetime({
+            error: "La fecha de vencimiento es obligatoria",
+        }),
 });
