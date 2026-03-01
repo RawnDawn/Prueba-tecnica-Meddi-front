@@ -10,7 +10,7 @@ import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX } from "lucide-vue-next";
 
 import { columns } from "~/components/taskManager/columns";
-import DataTable from "~/components/ui/data-table.vue";
+import DataTable from "~/components/ui/data-table/data-table.vue";
 
 const taskStore = useTaskStore();
 const data = ref<Task[]>([])
@@ -29,14 +29,14 @@ onMounted(async () => {
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
       <!-- Loading -->
-      <IconBadge v-if="taskStore.loading" text="Cargando tareas" variant="outline">
+      <!-- <IconBadge v-if="taskStore.loading" text="Cargando tareas" variant="outline">
         <Spinner data-icon="inline-end" />
-      </IconBadge>
+      </IconBadge> -->
 
       <!-- Error -->
-      <IconBadge v-if="taskStore.error" :text="taskStore.error" variant="destructive">
+      <!-- <IconBadge v-if="taskStore.error" :text="taskStore.error" variant="destructive">
         <CircleX data-icon="inline-end" />
-      </IconBadge>
+      </IconBadge> -->
 
       <div class="flex justify-end">
         <CreateButton />
