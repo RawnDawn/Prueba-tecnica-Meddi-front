@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Ellipsis, Eye, Pencil, Trash } from 'lucide-vue-next'
+import { CheckCircle, EllipsisVertical, Eye, Pencil, Trash } from 'lucide-vue-next'
 
 import TaskDetailsDialog from './TaskDetailsDialog.vue'
 import UpdateTaskDialog from './UpdateTaskDialog.vue'
@@ -43,7 +43,7 @@ const markAsPending = async () => {
     <DropdownMenu>
         <DropdownMenuTrigger as-child>
             <Button variant="ghost" class="h-8 w-8 p-0">
-                <Ellipsis />
+                <EllipsisVertical />
             </Button>
         </DropdownMenuTrigger>
 

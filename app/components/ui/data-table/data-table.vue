@@ -4,6 +4,7 @@ import type { ColumnDef } from '@tanstack/vue-table';
 import {
     FlexRender,
     getCoreRowModel,
+    getPaginationRowModel,
     useVueTable,
 } from '@tanstack/vue-table';
 
@@ -25,11 +26,12 @@ const table = useVueTable({
     get data() { return props.data },
     get columns() { return props.columns },
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
 })
 </script>
 
 <template>
-    <div class="border rounded-sm">
+    <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c]">
         <Table>
             <TableHeader>
                 <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">

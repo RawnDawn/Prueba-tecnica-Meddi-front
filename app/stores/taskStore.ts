@@ -8,6 +8,11 @@ export const useTaskStore = defineStore('tasks-test', {
         tasks: [] as Task[],
         loading: false,
         error: null as string | null,
+
+        // Pagination
+        page: 1,
+        total: 0,
+        totalPages: 1
     }),
     actions: {
         async fetchTasks(page = 1) {
@@ -17,6 +22,10 @@ export const useTaskStore = defineStore('tasks-test', {
             try {
                 const res = await getTasks(page)
                 this.tasks = res.data
+                this.page = res.page
+                this.total = res.total
+
+                this.totalPages = res.totalPages
             } catch (err: any) {
                 this.error = getTaskErrorMessage(err)
             } finally {

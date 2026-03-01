@@ -1,10 +1,8 @@
 # TODO
 
-- CRUD of tasks
-  - Mark tasks as done
   - filter tasks by prio
-  - group tasks by prio
   - filter tasks by date
+  - group tasks by prio
   - order tasks by date
   - seach tasks by name
 
