@@ -39,7 +39,7 @@ onMounted(async () => {
       </IconBadge>
 
       <div class="flex justify-end">
-        
+        <CreateButton />
       </div>
 
       <!-- Table -->
