@@ -32,6 +32,11 @@ export const getTasks = async (
     return body
 }
 
+/**
+ * Create a new task
+ * @param task 
+ * @returns 
+ */
 export const createTask = async (
     task: Partial<Task>
 ) => {
@@ -42,6 +47,31 @@ export const createTask = async (
         },
         body: JSON.stringify(task),
     })
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
+ * Get task by id
+ * @param id 
+ * @returns 
+ */
+export const showTask = async (
+    id: string
+) => {
+    const res = await fetch(`${TASK_URL}/${id}`)
 
     const body = await res.json()
 

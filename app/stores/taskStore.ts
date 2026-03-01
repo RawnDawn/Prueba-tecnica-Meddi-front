@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks } from "~/services/taskService"
+import { createTask, getTasks, showTask } from "~/services/taskService"
 import type { Task } from "~/types/task"
 
 export const useTaskStore = defineStore('tasks-test', {
@@ -36,6 +36,21 @@ export const useTaskStore = defineStore('tasks-test', {
             } finally {
                 this.loading = false
             }
+        },
+
+        async showTask(id: string) {
+            this.loading = true
+            this.error = null
+
+            try {
+                const res = await showTask(id)
+                return res.data
+            } catch (err: any) {
+                this.error = getTaskErrorMessage(err)
+            } finally {
+                this.loading = false
+            }
+
         }
     }
 })

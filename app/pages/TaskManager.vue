@@ -5,10 +5,10 @@ import { CircleX } from "lucide-vue-next";
 import { columns } from "~/components/taskManager/columns";
 import DataTable from "~/components/ui/data-table/data-table.vue";
 
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
+// import { createPinia } from 'pinia'
+// import { createApp } from 'vue'
 import {useTaskStore} from "~/stores/taskStore"
-import App from "~/app.vue";
+// import App from "~/app.vue";
 
 // const pinia = createPinia()
 // const app = createApp(App)
@@ -65,6 +65,11 @@ await store.fetchTasks();
 </template>
 
 <!-- TODO - See if pinia don't fuck up again -->
- <!-- TODO - Manage validation errors when you close the dialog -->
-  <!-- TODO - Add loading state when creating task (disable button) -->
-   <!-- TODO - Close dialog and check logic to refresh tasks -->
+
+
+<!-- 
+TODO - define actions
+  - Update task
+  - mark task as done
+  - delete task
+-->
