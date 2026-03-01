@@ -5,7 +5,7 @@ import { appDescription } from './app/constants/index'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxt/ui', 'shadcn-nuxt', '@vite-pwa/nuxt', '@vueuse/nuxt', '@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/eslint', '@nuxt/ui', 'shadcn-nuxt', '@vite-pwa/nuxt', '@vueuse/nuxt'],
   css: ['~/assets/css/tailwind.css'],
   vite: {
     plugins: [

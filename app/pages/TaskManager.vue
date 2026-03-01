@@ -1,24 +1,43 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
-import { useTaskStore } from "~/stores/taskStore";
-import { Spinner } from "@/components/ui/spinner"
-
-import type { Task } from "~/types/task";
-
 import Title from "~/components/common/Title.vue";
 import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX } from "lucide-vue-next";
-
 import { columns } from "~/components/taskManager/columns";
 import DataTable from "~/components/ui/data-table/data-table.vue";
 
-const taskStore = useTaskStore();
-const data = ref<Task[]>([])
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import {useTaskStore} from "~/stores/taskStore"
+import App from "~/app.vue";
 
-onMounted(async () => {
-  await taskStore.fetchTasks()
-  data.value = taskStore.tasks
-})
+// const pinia = createPinia()
+// const app = createApp(App)
+// app.use(pinia)
+
+const store = useTaskStore();
+await store.fetchTasks();
+
+
+// Test 1 - passed
+// const data = ref<Task[]>([])
+
+// onMounted(async () => {
+//   const res = await fetch(`http://localhost:3080/tasks`)
+
+//     const body = await res.json()
+
+//     if (!res.ok) {
+//         const errorCode = body.error as TaskErrorCode;
+
+//         const message =
+//             TASK_ERROR_MESSAGES[errorCode] ??
+//             DEFAULT_ERROR_MESSAGE;
+
+//         throw new Error(message);
+//     }
+
+//     data.value = body.data
+// })
 
 </script>
 
@@ -28,22 +47,18 @@ onMounted(async () => {
 
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
-      <!-- Loading -->
-      <!-- <IconBadge v-if="taskStore.loading" text="Cargando tareas" variant="outline">
-        <Spinner data-icon="inline-end" />
-      </IconBadge> -->
-
       <!-- Error -->
-      <!-- <IconBadge v-if="taskStore.error" :text="taskStore.error" variant="destructive">
+      <IconBadge v-if="store.error" :text="store.error" variant="destructive">
         <CircleX data-icon="inline-end" />
-      </IconBadge> -->
+      </IconBadge>
 
       <div class="flex justify-end">
         <CreateButton />
       </div>
 
       <!-- Table -->
-      <DataTable :columns="columns" :data="data" />
+      <DataTable :columns="columns" :data="store.tasks" />
+      <!-- <DataTable :columns="columns" :data="data" /> -->
     </div>
 
   </GPageContainer>

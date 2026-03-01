@@ -1,27 +1,26 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
 import { getTasks } from "~/services/taskService"
 import type { Task } from "~/types/task"
 
-export const useTaskStore = defineStore("tasks", () => {
-    const tasks = ref<Task[]>([]);
-    const loading = ref(false);
-    const error = ref<string | null>(null);
+export const useTaskStore = defineStore('tasks-test', {
+    state: () => ({
+        tasks: [] as Task[],
+        loading: false,
+        error: null as string | null,
+    }),
+    actions: {
+        async fetchTasks(page = 1) {
+            this.loading = true
+            this.error = null
 
-    const fetchTasks = async (page = 1) => {
-        loading.value = true
-        error.value = null
-
-        try {
-            const res = await getTasks(page)
-            tasks.value = res.data
-        } catch (err: any) {
-            error.value = err.message
-        } finally {
-            loading.value = false
+            try {
+                const res = await getTasks(page)
+                this.tasks = res.data
+            } catch (err: any) {
+                this.error = err.message
+            } finally {
+                this.loading = false
+            }
         }
-
     }
-
-    return { tasks, loading, error, fetchTasks }
-});
+})
