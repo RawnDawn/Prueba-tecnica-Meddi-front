@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watchEffect } from "vue"
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogClose
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useTaskStore } from "~/stores/taskStore"
 import { TaskStatus, type Task } from "~/types/task";
 import { TaskPriority } from "../../types/task";
 import { TaskPriorityLabels, TaskStatusLabels } from "./columns";
+import { Badge } from "@/components/ui/badge";
 
 const props = defineProps<{
     id: string,
@@ -19,7 +20,15 @@ const props = defineProps<{
 
 // dialog state
 const open = ref(false)
-const openDialog = () => (open.value = true)
+const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
+const openDialog = () => {
+    open.value = true
+    emit('update:open', true) // notifica al padre
+}
+const closeDialog = () => {
+    open.value = false
+    emit('update:open', false) // notifica al padre
+}
 
 // Get task details
 const store = useTaskStore();
@@ -27,6 +36,7 @@ const task = ref<Partial<Task> | null>(null)
 
 // Fetch task details when dialog opens
 watchEffect(async () => {
+    if (!props.id) return
     task.value = await store.showTask(props.id)
 })
 
@@ -72,7 +82,7 @@ const timeLeft = (dueDate: string | Date) => {
 </script>
 
 <template>
-    <Dialog v-model:open="open">
+    <Dialog :open="open" @openChange="(val: boolean) => open = val">
         <slot name="trigger" :openDialog="openDialog" />
 
         <DialogContent class="sm:max-w-sm">
@@ -90,18 +100,17 @@ const timeLeft = (dueDate: string | Date) => {
             </DialogHeader>
 
             <div class="mt-2">
-                <p class="mb-4" v-if="task?.dueDate"><strong>Fecha de vencimiento:</strong>
+                <p class="mb-4" v-if="task?.dueDate">
+                    <strong>Fecha de vencimiento:</strong>
                     {{ formatDate(task.dueDate) || 'Sin fecha devencimiento' }} ({{ timeLeft(task?.dueDate) }})
                 </p>
 
-                <p v-if="task?.description" class="mb-4"> {{ task.description }}</p>
-
-
+                <p v-if="task?.description" class="mb-4">{{ task.description }}</p>
             </div>
 
             <div class="mt-4 flex justify-end">
                 <DialogClose asChild>
-                    <Button variant="outline">Cerrar</Button>
+                    <Button variant="outline" @click="closeDialog">Cerrar</Button>
                 </DialogClose>
             </div>
         </DialogContent>
