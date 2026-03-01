@@ -71,17 +71,15 @@ const handleSubmit = () => {
                         </FieldDescription>
                     </Field>
 
-                    <!-- <Field>
-                        <Label for="description">
-                            Descripción <span className="text-destructive">*</span>
-                        </Label>
-                        <Input id="description" name="description" required v-model="formData.description"
-                            :class="errors.description ? 'border-destructive' : ''" />
+                    <Field :data-invalid="errors.description">
+                        <Label for="description">Descripción</Label>
+                        <Textarea id="description" name="description" v-model="formData.description"
+                            :aria-invalid="errors.description" :class="errors.description ? 'border-destructive' : ''" />
 
-                        <span v-if="errors.description" class="text-destructive text-sm ">
+                        <FieldDescription v-if="errors.description" class="text-destructive text-sm ">
                             {{ errors.description }}
-                        </span>
-                    </Field> -->
+                        </FieldDescription> 
+                    </Field>
                 </FieldGroup>
 
                 <DialogFooter>
