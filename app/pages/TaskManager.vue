@@ -40,11 +40,3 @@ await store.fetchTasks();
 
   </GPageContainer>
 </template>
-
-<!-- TODO - See if pinia don't fuck up again -->
-
-
-<!-- 
-TODO - define actions
-  - mark task as done
--->
