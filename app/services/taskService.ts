@@ -88,6 +88,12 @@ export const showTask = async (
     return body
 }
 
+/**
+ * Update a task
+ * @param id 
+ * @param task 
+ * @returns 
+ */
 export const updateTask = async (
     id: string,
     task: Partial<Task>
@@ -98,6 +104,55 @@ export const updateTask = async (
             "Content-Type": "application/json",
         },
         body: JSON.stringify(task),
+    })
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
+ * Delete a task
+ * @param id 
+ * @returns 
+ */
+export const deleteTask = async (
+    id: string
+) => {
+    const res = await fetch(`${TASK_URL}/${id}`, {
+        method: "DELETE",
+    })
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+export const markAsDone = async (
+    id: string
+) => {
+    const res = await fetch(`${TASK_URL}/${id}/done`, {
+        method: "PUT",
     })
 
     const body = await res.json()

@@ -65,6 +65,21 @@ export const useTaskStore = defineStore('tasks-test', {
             } finally {
                 this.loading = false
             }
-        }
+        },
+
+        async deleteTask(id: string) {
+            this.loading = true
+            this.error = null
+
+            try {
+                const res = await showTask(id)
+                // Remove task from the list without mutating the original array
+                this.tasks.splice(this.tasks.findIndex(t => t._id === id), 1)
+            } catch (err: any) {
+                this.error = getTaskErrorMessage(err)
+            } finally {
+                this.loading = false
+            }
+        },
     }
 })

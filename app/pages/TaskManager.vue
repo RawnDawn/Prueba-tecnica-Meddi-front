@@ -70,7 +70,6 @@ await store.fetchTasks();
 
 <!-- 
 TODO - define actions
-  - Update task
   - mark task as done
   - delete task
 -->
