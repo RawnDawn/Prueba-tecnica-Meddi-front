@@ -28,6 +28,8 @@ import {
 import { TaskPriority } from "~/types/task";
 import { useTaskStore } from "~/stores/taskStore"
 import DuePicker from "~/components/taskManager/DuePicker.vue";
+import Alert from "../common/Alert.vue";
+import { getTaskErrorMessage } from "~/lib/taskErrorMapper";
 
 const store = useTaskStore();
 
@@ -46,6 +48,7 @@ const dueDate = ref<string>("");
 
 // errors
 const errors = ref<{ [key: string]: string }>({});
+const apiError = ref<string>("");
 
 // Submit
 const handleSubmit = async () => {
@@ -68,13 +71,20 @@ const handleSubmit = async () => {
         return;
     }
 
-    console.log(result.data);
+    try {
+        // Here we need to cast the priority to the correct type
+        await store.createTask({
+            ...result.data,
+            priority: result.data.priority as TaskPriority
+        });
 
-    // try {
-    //     await store.createTask(result.data);
-    // } catch (error) {
-    //     console.error("Error: ", error);
-    // }
+        await store.fetchTasks();
+
+        // Close dialog
+        open.value = false;
+    } catch (error) {
+        apiError.value = getTaskErrorMessage(error)
+    }
 };
 
 /**
@@ -172,19 +182,6 @@ watch(open, (val) => {
                     </Field>
 
                     <!-- Due date -->
-                    <!-- <Field :data-invalid="errors.dueDate">
-                        <Label for="dueDate">
-                            Fecha de vencimiento <span className="text-destructive">*</span>
-                        </Label>
-                        <Input id="dueDate" name="dueDate" required v-model="formData.dueDate"
-                            :aria-invalid="errors.dueDate" :class="errors.dueDate ? 'border-destructive' : ''" />
-
-                        <FieldDescription v-if="errors.dueDate" class="text-destructive text-sm ">
-                            {{ errors.dueDate }}
-                        </FieldDescription>
-                    </Field> -->
-
-                    <!-- Due date -->
                     <Field :data-invalid="errors.dueDate">
                         <Label for="dueDate">
                             Fecha de vencimiento test <span className="text-destructive">*</span>
@@ -199,6 +196,11 @@ watch(open, (val) => {
 
 
                 </FieldGroup>
+
+                <!-- Api errors -->
+                <div class="mb-5">
+                    <Alert v-if="apiError" variant="destructive" :text="apiError" />
+                </div>
 
                 <DialogFooter>
                     <DialogClose asChild>

@@ -13,7 +13,7 @@ export interface Task {
     _id: string;
     title: string;
     description: string;
-    priority: TaskPriority;
+    priority: TaskPriority | "low" | "medium" | "high";
     status: TaskStatus;
     dueDate: Date | string;
     createdAt: Date;
