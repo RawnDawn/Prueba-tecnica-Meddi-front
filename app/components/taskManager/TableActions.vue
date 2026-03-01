@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import TaskDetailsDialog from './TaskDetailsDialog.vue';
 import { CheckCircle, Ellipsis, Eye, Pencil, Trash } from 'lucide-vue-next';
+import UpdateTaskDialog from './UpdateTaskDialog.vue';
 
 defineProps<{
     task: {
@@ -16,7 +17,8 @@ defineProps<{
     }
 }>();
 
-const showDialog = ref(false)
+const showTaskDialog = ref(false)
+const updateTaskDialog = ref(false)
 </script>
 
 <template>
@@ -31,11 +33,7 @@ const showDialog = ref(false)
 
             <DropdownMenuSeparator />
 
-            <!-- <DropdownMenuItem>
-                <Eye />
-                Ver tarea
-            </DropdownMenuItem> -->
-            <DropdownMenuItem @click="showDialog = true">
+            <DropdownMenuItem @click="showTaskDialog = true">
                 <Eye />
                 Ver tarea
             </DropdownMenuItem>
@@ -45,7 +43,7 @@ const showDialog = ref(false)
                 Marcar como terminada
             </DropdownMenuItem>
 
-            <DropdownMenuItem class="text-blue-400">
+            <DropdownMenuItem class="text-blue-400" @click="updateTaskDialog = true">
                 <Pencil />
                 Editar
             </DropdownMenuItem>
@@ -59,5 +57,6 @@ const showDialog = ref(false)
         </DropdownMenuContent>
     </DropdownMenu>
 
-    <TaskDetailsDialog :id="task._id" v-model:open="showDialog" />
+    <TaskDetailsDialog :id="task._id" v-model:open="showTaskDialog" />
+    <UpdateTaskDialog :id="task._id" v-model:open="updateTaskDialog" />
 </template>

@@ -87,3 +87,30 @@ export const showTask = async (
 
     return body
 }
+
+export const updateTask = async (
+    id: string,
+    task: Partial<Task>
+) => {
+    const res = await fetch(`${TASK_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+    })
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}

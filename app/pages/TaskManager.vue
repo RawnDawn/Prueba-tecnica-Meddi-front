@@ -8,6 +8,7 @@ import DataTable from "~/components/ui/data-table/data-table.vue";
 // import { createPinia } from 'pinia'
 // import { createApp } from 'vue'
 import {useTaskStore} from "~/stores/taskStore"
+import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 // import App from "~/app.vue";
 
 // const pinia = createPinia()
@@ -53,7 +54,7 @@ await store.fetchTasks();
       </IconBadge>
 
       <div class="flex justify-end">
-        <CreateButton />
+        <CreateDialog />
       </div>
 
       <!-- Table -->
