@@ -38,6 +38,10 @@ onMounted(async () => {
         <CircleX data-icon="inline-end" />
       </IconBadge>
 
+      <div class="flex justify-end">
+        
+      </div>
+
       <!-- Table -->
       <DataTable :columns="columns" :data="data" />
     </div>
