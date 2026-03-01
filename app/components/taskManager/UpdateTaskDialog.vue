@@ -25,7 +25,7 @@ import {
 
 import { ref, watch } from 'vue'
 import { taskUpdateSchema } from '~/schemas/taskSchema'
-import { TaskPriority, TaskStatus, type Task } from '~/types/task'
+import { TaskPriority, TaskStatus } from '~/types/task'
 import { useTaskStore } from '~/stores/taskStore'
 import DuePicker from '~/components/taskManager/DuePicker.vue'
 import Alert from '../common/Alert.vue'
@@ -85,7 +85,7 @@ watch(
                     dueDate.value = task.dueDate || ''
                 }
             } catch (err) {
-                console.error('Error cargando tarea:', err)
+                console.error('Error loading task:', err)
             }
         }
 
@@ -129,13 +129,26 @@ const handleSubmit = async () => {
         apiError.value = getTaskErrorMessage(err)
     }
 }
+
+// Manage dialog closing with on top close button
+const localOpen = ref(props.open)
+
+// sync localOpen with props.open
+watch(() => props.open, val => {
+    localOpen.value = val
+})
+
+// sync props.open with localOpen
+watch(localOpen, val => {
+    emit('update:open', val)
+})
 </script>
 
 <template>
-    <Dialog :open="props.open" @openChange="(val: boolean) => emit('update:open', val)">
+    <Dialog v-model:open="localOpen">
         <slot name="trigger" :openDialog="() => emit('update:open', true)" />
 
-        <DialogContent class="sm:max-w-sm">
+        <DialogContent @keydown.esc="emit('update:open', false)" class="sm:max-w-sm">
             <form @submit.prevent="handleSubmit" novalidate>
                 <DialogHeader class="mb-2">
                     <DialogTitle>Actualizar tarea</DialogTitle>
@@ -222,8 +235,8 @@ const handleSubmit = async () => {
                 </div>
 
                 <DialogFooter>
-                    <DialogClose asChild>
-                        <Button as="button" variant="outline">Cancelar</Button>
+                    <DialogClose asChild v-on:click="emit('update:open', false)">
+                        <Button v-on:click="emit('update:open', false)" as="button" variant="outline">Cancelar</Button>
                     </DialogClose>
                     <Button type="submit">Guardar cambios</Button>
                 </DialogFooter>

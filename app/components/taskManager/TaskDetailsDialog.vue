@@ -79,23 +79,26 @@ const timeLeft = (dueDate: string | Date) => {
     if (diffHours > 0) return `${diffHours} hora${diffHours > 1 ? "s" : ""}`;
     return `${diffMinutes} minuto${diffMinutes > 1 ? "s" : ""}`;
 };
+
 </script>
 
 <template>
     <Dialog :open="open" @openChange="(val: boolean) => open = val">
         <slot name="trigger" :openDialog="openDialog" />
 
-        <DialogContent class="sm:max-w-sm">
+        <DialogContent @keydown.esc="emit('update:open', false)" class="sm:max-w-sm">
             <DialogHeader>
-                <div class="flex flex-row gap-2">
+                <div class="flex flex-col gap-2">
                     <DialogTitle>{{ task ? task.title : '' }}</DialogTitle>
-                    <Badge v-if="task?.priority" :variant="priorityVariantMap[task.priority]">
-                        {{ TaskPriorityLabels[task.priority] }}
-                    </Badge>
+                    <div class="flex flex-row gap-2">
+                        <Badge v-if="task?.priority" :variant="priorityVariantMap[task.priority]">
+                            {{ TaskPriorityLabels[task.priority] }}
+                        </Badge>
 
-                    <Badge v-if="task?.status" :variant="statusVariantMap[task.status]">
-                        {{ TaskStatusLabels[task.status] }}
-                    </Badge>
+                        <Badge v-if="task?.status" :variant="statusVariantMap[task.status]">
+                            {{ TaskStatusLabels[task.status] }}
+                        </Badge>
+                    </div>
                 </div>
             </DialogHeader>
 

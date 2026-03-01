@@ -14,14 +14,16 @@ import { CheckCircle, Ellipsis, Eye, Pencil, Trash } from 'lucide-vue-next'
 import TaskDetailsDialog from './TaskDetailsDialog.vue'
 import UpdateTaskDialog from './UpdateTaskDialog.vue'
 import { TaskStatus } from '~/types/task'
+import DeleteTaskDialog from './DeleteTaskDialog.vue'
 
 defineProps<{
-    task: { _id: string, status: string }
+    task: { _id: string, taskStatus: string }
 }>()
 
 // Dialog states
 const showTaskDialog = ref(false)
 const updateTaskDialog = ref(false)
+const deleteTaskDialog = ref(false)
 </script>
 
 <template>
@@ -40,7 +42,7 @@ const updateTaskDialog = ref(false)
                 <Eye /> Ver tarea
             </DropdownMenuItem>
 
-            <DropdownMenuItem class="text-green-400" v-if="task.status !== TaskStatus.DONE">
+            <DropdownMenuItem class="text-green-400" v-if="task.taskStatus !== TaskStatus.DONE">
                 <CheckCircle /> Marcar como terminada
             </DropdownMenuItem>
 
@@ -48,7 +50,7 @@ const updateTaskDialog = ref(false)
                 <Pencil /> Editar
             </DropdownMenuItem>
 
-            <DropdownMenuItem variant="destructive">
+            <DropdownMenuItem variant="destructive" @click="deleteTaskDialog = true">
                 <Trash /> Eliminar
             </DropdownMenuItem>
         </DropdownMenuContent>
@@ -56,4 +58,5 @@ const updateTaskDialog = ref(false)
 
     <TaskDetailsDialog :id="task._id" v-model:open="showTaskDialog" />
     <UpdateTaskDialog :id="task._id" v-model:open="updateTaskDialog" />
+    <DeleteTaskDialog :id="task._id" v-model:open="deleteTaskDialog" />
 </template>
