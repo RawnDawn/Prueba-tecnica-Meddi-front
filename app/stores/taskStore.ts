@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { TASK_ERROR_MESSAGES } from "~/constants/taskErrors";
 import { getTasks } from "~/services/taskService"
 import type { Task } from "~/types/task"
 
@@ -21,9 +20,6 @@ export const useTaskStore = defineStore("tasks", () => {
         } finally {
             loading.value = false
         }
-
-        // TODO - remove this
-        // error.value = "test"
 
     }
 

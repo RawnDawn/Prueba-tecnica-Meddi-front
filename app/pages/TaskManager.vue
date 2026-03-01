@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useTaskStore } from "~/stores/taskStore";
 import { Spinner } from "@/components/ui/spinner"
+
+import type { Task } from "~/types/task";
 
 import Title from "~/components/common/Title.vue";
 import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX } from "lucide-vue-next";
-const taskStore = useTaskStore();
 
-onMounted(() => {
-  taskStore.fetchTasks()
+import { columns } from "~/components/taskManager/columns";
+import DataTable from "~/components/ui/data-table.vue";
+
+const taskStore = useTaskStore();
+const data = ref<Task[]>([])
+
+onMounted(async () => {
+  await taskStore.fetchTasks()
+  data.value = taskStore.tasks
 })
 
 </script>
@@ -29,21 +37,10 @@ onMounted(() => {
       <IconBadge v-if="taskStore.error" :text="taskStore.error" variant="destructive">
         <CircleX data-icon="inline-end" />
       </IconBadge>
+
+      <!-- Table -->
+      <DataTable :columns="columns" :data="data" />
     </div>
 
-    <!-- <Table v-if="!taskStore.loading && !taskStore.error">
-      <TableHeader>
-        <TableRow>
-          <TableHead>Título</TableHead>
-
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        <TableRow v-for="task in taskStore.tasks" :key="task._id">
-          <TableCell>{{ task.title }}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table> -->
   </GPageContainer>
 </template>
