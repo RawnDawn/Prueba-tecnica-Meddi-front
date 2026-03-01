@@ -8,13 +8,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "~/components/ui/dialog";
-import { Button } from '~/components/ui/button';
+import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
-import { Field, FieldGroup } from "~/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "~/components/ui/field";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-// import { ref } from "vue";
+import { ref } from "vue";
 import { taskSchema } from "~/schemas/taskSchema";
+import { Textarea } from "~/components/ui/textarea"
 
 const formData = ref({
     title: "",
