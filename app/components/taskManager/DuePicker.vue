@@ -35,11 +35,13 @@ watch(
     { immediate: true }
 )
 
+const DEFAULT_MESSAGE = "Selecciona una fecha"
+
 /**
  * Format the date to dd/mm/yyyy
  */
 const formattedDate = computed(() => {
-    if (!internalDate.value) return "Selecciona una fecha"
+    if (!internalDate.value) return DEFAULT_MESSAGE
 
     const day = String(internalDate.value.day).padStart(2, "0")
     const month = String(internalDate.value.month).padStart(2, "0")
@@ -73,9 +75,10 @@ const clearDate = () => {
 <template>
     <Popover>
         <PopoverTrigger as-child>
-            <Button variant="outline" class="w-[280px] justify-start text-left font-normal">
+            <Button variant="outline" class="w-full lg:w-[280px] justify-start text-left font-normal">
                 <CalendarIcon class="mr-2 h-4 w-4" />
-                {{ formattedDate }}
+                <span :class="formattedDate === DEFAULT_MESSAGE ? 'text-gray-500' : 'text-white'">{{ formattedDate
+                    }}</span>
             </Button>
         </PopoverTrigger>
 

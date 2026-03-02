@@ -117,7 +117,7 @@ watch(open, (val) => {
 <template>
     <Dialog v-model:open="open">
         <DialogTrigger asChild>
-            <Button variant="default">
+            <Button variant="default" class="w-full lg:w-auto">
                 <Plus /> Nueva tarea
             </Button>
         </DialogTrigger>

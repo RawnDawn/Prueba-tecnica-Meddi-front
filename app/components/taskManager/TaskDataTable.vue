@@ -20,7 +20,7 @@ import { TaskStatus, type Task } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
-import { CircleX, Search, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { CircleX, Search, ChevronLeft, ChevronRight, Info } from "lucide-vue-next";
 import { columns } from './columns';
 import { DataTable } from '../ui/data-table';
 
@@ -99,27 +99,30 @@ const table = useVueTable({
         <CircleX data-icon="inline-end" />
     </IconBadge>
 
-    <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
+    <div class="flex flex-col-reverse lg:flex-row lg:items-center justify-between flex-wrap gap-5 lg:gap-4 mb-4">
         <!-- Filters -->
-        <div class="flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap items-center gap-5 lg:gap-4">
             <!-- Filter by title -->
-            <div class="flex gap-2 items-center justify-center">
-                <Search />
-                <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
+            <div class="flex gap-2 items-center justify-center  w-full lg:w-auto">
+                <Search class="w-5 h-5" />
+                <Input class="text-sm" id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
             </div>
 
             <!-- Filter by status -->
             <Select default-value="" v-model="statusFilter">
-                <SelectTrigger>
-                    <SelectValue placeholder="Filtar por estado" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem :value="null">Todos los estados</SelectItem>
-                        <SelectItem :value="TaskStatus.PENDING">Pendiente</SelectItem>
-                        <SelectItem :value="TaskStatus.DONE" class="text-green-500">Completada</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
+                <div class="flex gap-2 items-center justify-center  w-full lg:w-auto">
+                    <Info class="w-5 h-5" />
+                    <SelectTrigger class="w-full lg:w-auto">
+                        <SelectValue placeholder="Filtar por estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem :value="null">Todos los estados</SelectItem>
+                            <SelectItem :value="TaskStatus.PENDING">Pendiente</SelectItem>
+                            <SelectItem :value="TaskStatus.DONE" class="text-green-500">Completada</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </div>
             </Select>
 
             <!-- Filter by due date -->
