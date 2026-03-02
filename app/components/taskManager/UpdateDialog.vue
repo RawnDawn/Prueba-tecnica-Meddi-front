@@ -1,35 +1,7 @@
 <script setup lang="ts">
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
-import { Separator } from '~/components/ui/separator'
-import { Field, FieldDescription, FieldGroup } from '~/components/ui/field'
-import { Label } from '~/components/ui/label'
-import { Input } from '~/components/ui/input'
-import { Textarea } from '~/components/ui/textarea'
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '~/components/ui/select'
-
-import { ref, watch } from 'vue'
-import { taskUpdateSchema } from '~/schemas/taskSchema'
 import { TaskPriority, TaskStatus } from '~/types/task'
-import { useTaskStore } from '~/stores/taskStore'
 import DuePicker from '~/components/taskManager/DuePicker.vue'
-import Alert from '../common/Alert.vue'
-import { getTaskErrorMessage } from '~/lib/taskErrorMapper'
+import Alert from '~/components/common/Alert.vue'
 
 const props = defineProps<{
     id: string
@@ -38,110 +10,20 @@ const props = defineProps<{
 
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 
-const store = useTaskStore()
+const {
+    formData,
+    selectedPriority,
+    selectedStatus,
+    dueDate,
+    errors,
+    apiError,
+    localOpen,
+    handleSubmit
+} = useTaskForm(props.id, props.open)
 
-const formData = ref({
-    title: '',
-    description: '',
-    priority: '',
-    status: '',
-    dueDate: ''
-})
-
-// pivot to set and send prio to formData
-const selectedPriority = ref<TaskPriority | 'low' | 'medium' | 'high'>('medium')
-// pivot to set and send status to formData
-const selectedStatus = ref<TaskStatus | 'pending' | 'done'>('pending')
-// Get due date from picker
-const dueDate = ref<string>('')
-
-// Errors
-const errors = ref<{ [key: string]: string }>({})
-const apiError = ref<string>('')
-
-// Reset form
-const resetForm = () => {
-    errors.value = {}
-    apiError.value = ''
-}
-
-// Load data when dialog is opened
-watch(
-    () => props.open,
-    async (isOpen) => {
-        if (isOpen && props.id) {
-            try {
-                const task = await store.showTask(props.id)
-                if (task) {
-                    formData.value = {
-                        title: task.title || '',
-                        description: task.description || '',
-                        priority: task.priority as TaskPriority,
-                        status: task.status as TaskStatus,
-                        dueDate: task.dueDate || ''
-                    }
-                    selectedPriority.value = task.priority as TaskPriority
-                    selectedStatus.value = task.status as TaskStatus
-                    dueDate.value = task.dueDate || ''
-                }
-            } catch (err) {
-                console.error('Error loading task:', err)
-            }
-        }
-
-        if (!isOpen) resetForm()
-    }
-)
-
-// Submit
-const handleSubmit = async () => {
-    errors.value = {}
-
-    formData.value.priority = selectedPriority.value
-    formData.value.status = selectedStatus.value
-    formData.value.dueDate = dueDate.value
-
-    const result = taskUpdateSchema.safeParse(formData.value)
-
-    if (!result.success) {
-        // For each error, show the message
-        result.error.issues.forEach((issue) => {
-            const key = issue.path[0] as string
-            errors.value[key] = issue.message
-        })
-        return
-    }
-
-    try {
-        // Here we need to cast the priority to the correct type
-        await store.updateTask(props.id, {
-            ...result.data,
-            priority: result.data.priority as TaskPriority,
-            status: result.data.status as TaskStatus
-        })
-
-        await store.fetchTasks()
-
-        // Cerrar diálogo
-        emit('update:open', false)
-        resetForm()
-    } catch (err) {
-        apiError.value = getTaskErrorMessage(err)
-    }
-}
-
-// Manage dialog closing with on top close button
-const localOpen = ref(props.open)
-
-// sync localOpen with props.open
-watch(() => props.open, val => {
-    localOpen.value = val
-})
-
-// sync props.open with localOpen
-watch(localOpen, val => {
-    emit('update:open', val)
-})
+// Sync localOpen with parent
+watch(localOpen, val => emit('update:open', val))
+watch(() => props.open, val => localOpen.value = val)
 </script>
 
 <template>

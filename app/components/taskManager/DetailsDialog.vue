@@ -24,11 +24,11 @@ const open = ref(false)
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 const openDialog = () => {
     open.value = true
-    emit('update:open', true) // notifica al padre
+    emit('update:open', true) 
 }
 const closeDialog = () => {
     open.value = false
-    emit('update:open', false) // notifica al padre
+    emit('update:open', false) 
 }
 
 // Get task details

@@ -1,117 +1,17 @@
 <script setup lang="ts">
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
-import { Separator } from "~/components/ui/separator";
-import { Field, FieldDescription, FieldGroup } from "~/components/ui/field";
-import { Label } from "~/components/ui/label";
-import { Input } from "~/components/ui/input";
-import { ref } from "vue";
-import { taskSchema } from "~/schemas/taskSchema";
-import { Textarea } from "~/components/ui/textarea"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "~/components/ui/select"
 import { TaskPriority } from "~/types/task";
-import { useTaskStore } from "~/stores/taskStore"
 import DuePicker from "~/components/taskManager/DuePicker.vue";
-import Alert from "../common/Alert.vue";
-import { getTaskErrorMessage } from "~/lib/taskErrorMapper";
 import { Plus } from "lucide-vue-next";
 
-const store = useTaskStore();
-
-const formData = ref({
-    title: "",
-    description: "",
-    priority: "",
-    dueDate: ""
-});
-
-// pivot to set and send prio to formData
-const selectedPriority = ref<TaskPriority | "low" | "medium" | "high">("medium");
-
-// Get due date from picker
-const dueDate = ref<string>("");
-
-// errors
-const errors = ref<{ [key: string]: string }>({});
-const apiError = ref<string>("");
-
-// Submit
-const handleSubmit = async () => {
-    errors.value = {};
-
-    // add priority and dueDate
-    formData.value.priority = selectedPriority.value;
-    formData.value.dueDate = dueDate.value;
-
-    // Validate form
-    const result = taskSchema.safeParse(formData.value);
-
-    // Handle validation errors
-    if (!result.success) {
-        // For each error, show the message
-        result.error.issues.forEach((issue) => {
-            const key = issue.path[0] as string;
-            errors.value[key] = issue.message;
-        });
-        return;
-    }
-
-    try {
-        // Here we need to cast the priority to the correct type
-        await store.createTask({
-            ...result.data,
-            priority: result.data.priority as TaskPriority
-        });
-
-        await store.fetchTasks();
-
-        // Close dialog
-        open.value = false;
-    } catch (error) {
-        apiError.value = getTaskErrorMessage(error)
-    }
-};
-
-/**
- * Manage dialog open state
- */
-const open = ref(false)
-
-/**
- * Clean form when submit or close dialog
- */
-const resetForm = () => {
-    formData.value = {
-        title: "",
-        description: "",
-        priority: "",
-        dueDate: ""
-    }
-
-    selectedPriority.value = "medium"
-    dueDate.value = ""
-    errors.value = {}
-}
-
-watch(open, (val) => {
-    if (!val) resetForm()
-})
+const {
+    open,
+    formData,
+    selectedPriority,
+    dueDate,
+    errors,
+    apiError,
+    handleSubmit
+} = useCreateTaskForm()
 </script>
 
 <template>
