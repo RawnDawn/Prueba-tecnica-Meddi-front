@@ -122,7 +122,7 @@ watch(open, (val) => {
             </Button>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent class="sm:max-w-sm">
             <form @submit.prevent="handleSubmit" novalidate>
                 <DialogHeader class="mb-2">
                     <DialogTitle>Nueva tarea</DialogTitle>
@@ -136,7 +136,7 @@ watch(open, (val) => {
                     <!-- Title -->
                     <Field :data-invalid="errors.title">
                         <Label for="title">
-                            Titulo <span className="text-destructive">*</span>
+                            Titulo <span class="text-destructive">*</span>
                         </Label>
                         <Input id="title" name="title" required v-model="formData.title" :aria-invalid="errors.title"
                             :class="errors.title ? 'border-destructive' : ''" />
@@ -161,7 +161,7 @@ watch(open, (val) => {
                     <!-- Prio -->
                     <Field :data-invalid="errors.priority">
                         <Label class="mb-3" for="priority">
-                            Prioridad<span className="text-destructive">*</span>
+                            Prioridad<span class="text-destructive">*</span>
                         </Label>
 
                         <Select default-value="medium"
@@ -187,7 +187,7 @@ watch(open, (val) => {
                     <!-- Due date -->
                     <Field :data-invalid="errors.dueDate">
                         <Label for="dueDate">
-                            Fecha de vencimiento test <span className="text-destructive">*</span>
+                            Fecha de vencimiento test <span class="text-destructive">*</span>
                         </Label>
 
                         <DuePicker v-model="dueDate" />

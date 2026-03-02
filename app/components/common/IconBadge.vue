@@ -9,7 +9,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div className="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-2">
         <Badge :variant="variant">
             {{ text }}
             <slot />

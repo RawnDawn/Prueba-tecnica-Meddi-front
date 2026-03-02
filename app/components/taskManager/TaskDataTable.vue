@@ -137,7 +137,7 @@ const table = useVueTable({
 
     <DataTable :table="table" :dataCount="columns.length" />
 
-    <div className="flex items-center justify-center space-x-2 py-4 gap-3">
+    <div class="flex items-center justify-center space-x-2 py-4 gap-3">
         <Button variant="outline" :disabled="store.pagination.page === 1 || store.loading"
             @click="store.fetchTasks(store.pagination.page - 1)">
             <ChevronLeft />

@@ -11,7 +11,7 @@ import { useTaskStore } from "~/stores/taskStore"
 import { columns } from './columns';
 import type { TaskPriority } from '~/types/task';
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import {DataTable} from '../ui/data-table';
+import { DataTable } from '../ui/data-table';
 
 const props = defineProps<{
     priority: TaskPriority
@@ -44,7 +44,7 @@ const table = useVueTable({
 
     <DataTable :table="table" :dataCount="columns.length" />
 
-    <div className="flex items-center justify-center space-x-2 py-4 gap-3">
+    <div class="flex items-center justify-center space-x-2 py-4 gap-3">
         <Button variant="outline"
             :disabled="store.tasksByPriority[props.priority].pagination.page === 1 || store.loading"
             @click="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page - 1, 10)">
