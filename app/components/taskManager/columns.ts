@@ -76,11 +76,16 @@ export const columns: ColumnDef<Task>[] = [
     {
         accessorKey: 'dueDate',
         header: 'Fecha de vencimiento',
-        cell: ((row) => {
+        cell: (row) => {
             const date = new Date(row.getValue() as string);
 
-            return date.toLocaleDateString()
-        })
+            // Format date with day, month and year
+            const day = date.getUTCDate();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
+
+            return `${day}/${month}/${year}`;
+        },
     },
     {
         id: 'actions',

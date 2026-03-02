@@ -1,9 +1,8 @@
 # TODO
 
-  - filter tasks by prio
   - filter tasks by date
   - group tasks by prio
-  - order tasks by date
+  - sort / order tasks by date
   - seach tasks by name
 
 - KPI

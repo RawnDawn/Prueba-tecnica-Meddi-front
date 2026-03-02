@@ -1,13 +1,21 @@
 <script setup lang="ts" generic="TData, TValue">
 import type { ColumnDef } from '@tanstack/vue-table';
-
+import { ref } from "vue";
 import {
     FlexRender,
     getCoreRowModel,
     getPaginationRowModel,
     useVueTable,
+    getFilteredRowModel
 } from '@tanstack/vue-table';
-
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '~/components/ui/select'
 import {
     Table,
     TableBody,
@@ -16,21 +24,65 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { TaskStatus } from '~/types/task';
 
 const props = defineProps<{
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }>()
 
+const statusFilter = ref("")
+const dateFilter = ref("")
+
+// Set column filters
+const columnFilters = computed(() => {
+    const filters: { id: string; value: string }[] = [];
+
+    if (statusFilter.value) {
+        filters.push({ id: "status", value: statusFilter.value });
+    }
+
+    if (dateFilter.value) {
+        filters.push({ id: "dueDate", value: dateFilter.value });
+    }
+
+    return filters;
+});
+
 const table = useVueTable({
     get data() { return props.data },
     get columns() { return props.columns },
+    state: {
+        get columnFilters() {
+            return columnFilters.value
+        }
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel()
 })
 </script>
 
 <template>
+    <div class="flex gap-4">
+        <!-- Filter by status -->
+        <Select default-value="" v-model="statusFilter">
+            <SelectTrigger>
+                <SelectValue placeholder="Filtar por estado" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                    <SelectItem :value="null">Todos los estados</SelectItem>
+                    <SelectItem :value="TaskStatus.PENDING">Pendiente</SelectItem>
+                    <SelectItem :value="TaskStatus.DONE" class="text-green-500">Completada</SelectItem>
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+
+        <!-- Filter by due date -->
+        <DuePicker v-model="dateFilter" />
+    </div>
+
     <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c]">
         <Table>
             <TableHeader>
