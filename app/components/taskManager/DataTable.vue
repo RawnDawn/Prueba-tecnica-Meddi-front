@@ -66,9 +66,9 @@ const columnFilters = computed(() => {
 watch(
     [titleFilter, statusFilter, dateFilter],
     async () => {
-        store.page = 1
+        store.pagination.page = 1
 
-        await store.fetchTasks(store.page, 10, {
+        await store.fetchTasks(store.pagination.page, 10, {
             title: titleFilter.value,
             status: statusFilter.value,
             dueDate: dateFilter.value
@@ -106,7 +106,7 @@ const table = useVueTable({
         <CircleX data-icon="inline-end" />
     </IconBadge>
 
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-wrap gap-4 mb-4">
         <!-- Filter by title -->
         <div>
             <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
@@ -132,7 +132,7 @@ const table = useVueTable({
         <CreateDialog />
     </div>
 
-    <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c]">
+    <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c] mb-4">
         <Table>
             <TableHeader>
                 <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -170,15 +170,15 @@ const table = useVueTable({
     </div>
 
     <div className="flex items-center justify-center space-x-2 py-4 gap-3">
-        <Button variant="outline" :disabled="store.page === 1 || store.loading"
-            @click="store.fetchTasks(store.page - 1)">
+        <Button variant="outline" :disabled="store.pagination.page === 1 || store.loading"
+            @click="store.fetchTasks(store.pagination.page - 1)">
             Anterior
         </Button>
 
-        <span>Página {{ store.page }} de {{ store.totalPages }}</span>
+        <span>Página {{ store.pagination.page }} de {{ store.pagination.totalPages }}</span>
 
-        <Button variant="outline" :disabled="store.page === store.totalPages || store.loading"
-            @click="store.fetchTasks(store.page + 1)">
+        <Button variant="outline" :disabled="store.pagination.page === store.pagination.totalPages || store.loading"
+            @click="store.fetchTasks(store.pagination.page + 1)">
             Siguiente
         </Button>
     </div>

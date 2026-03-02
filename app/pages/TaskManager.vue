@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import Title from "~/components/common/Title.vue";
-import IconBadge from "~/components/common/IconBadge.vue"
-import { CircleX } from "lucide-vue-next";
 import { columns } from "~/components/taskManager/columns";
 import DataTable from "~/components/taskManager/DataTable.vue";
-
-// import { useTaskStore } from "~/stores/taskStore"
-
-// const store = useTaskStore();
-// await store.fetchTasks();
+import DataTableByPriority from "~/components/taskManager/DataTableByPriority.vue";
+import { TaskPriority } from "~/types/task";
 
 </script>
 
@@ -20,16 +15,26 @@ import DataTable from "~/components/taskManager/DataTable.vue";
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
       <!-- CRUD -->
-      <DataTable :columns="columns" />
+      <div class="mb-14">
+        <DataTable :columns="columns" />
+      </div>
 
 
       <!-- Per prio -->
-      <!-- <div class="grid grid-cols-3">
-        <DataTable :columns="columns" :data="store.tasks" />
-        <DataTable :columns="columns" :data="store.tasks" />
-        <DataTable :columns="columns" :data="store.tasks" />
-  
-      </div> -->
+      <div class="grid grid-cols-1 gap-10 xl:grid-cols-3">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
+          <DataTableByPriority :priority="TaskPriority.HIGH" />
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h1>
+          <DataTableByPriority :priority="TaskPriority.MEDIUM" />
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
+          <DataTableByPriority :priority="TaskPriority.LOW" />
+        </div>
+      </div>
     </div>
 
 
