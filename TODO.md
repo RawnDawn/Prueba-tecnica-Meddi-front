@@ -1,6 +1,4 @@
 # TODO
-  - group tasks by prio
-
 - KPI
   - show in a chart the number of tasks per prio
   - show tasks by state

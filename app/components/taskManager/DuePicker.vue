@@ -9,9 +9,11 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "~/components/ui/popover"
+import { X } from "lucide-vue-next";
 
 const props = defineProps<{
     modelValue: string | undefined
+    clearable?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -61,6 +63,11 @@ const updateDate = (val: DateValue | undefined) => {
     const isoString = val.toDate("UTC").toISOString()
     emit("update:modelValue", isoString)
 }
+
+const clearDate = () => {
+    internalDate.value = undefined
+    emit("update:modelValue", undefined)
+}
 </script>
 
 <template>
@@ -76,4 +83,10 @@ const updateDate = (val: DateValue | undefined) => {
             <Calendar mode="single" :v-model="internalDate" @update:model-value="updateDate" />
         </PopoverContent>
     </Popover>
+
+    <Button v-if="internalDate && props.clearable" @click="clearDate" variant="destructive"
+        class="justify-start text-left font-normal">
+        <X />
+        Borrar fecha
+    </Button>
 </template>

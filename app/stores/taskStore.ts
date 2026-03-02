@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone } from "~/services/taskService"
+import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone, markAsPending } from "~/services/taskService"
 import { TaskStatus, type Task, type TaskFilters, type TaskPriority } from "~/types/task"
 
 interface Pagination {
@@ -179,7 +179,7 @@ export const useTaskStore = defineStore('tasks', {
 
       try {
         // Asumiendo que markAsDone también sirve para revertir
-        await markAsDone(id)
+        await markAsPending(id)
 
         this.updateTaskStatus(id, TaskStatus.PENDING)
       } catch (err: any) {

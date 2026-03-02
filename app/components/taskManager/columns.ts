@@ -4,6 +4,7 @@ import { TaskPriority, TaskStatus, type Task } from '~/types/task'
 import type { ColumnDef } from '@tanstack/vue-table'
 import TableActions from '~/components/taskManager/TableActions.vue';
 import StatusCell from './StatusCell.vue';
+import { AlertCircle, Smile, AlertTriangle, CheckCircle, Clock } from 'lucide-vue-next';
 
 /**
  * Convert task priority response into readeable content
@@ -44,10 +45,16 @@ export const columns: ColumnDef<Task>[] = [
 
             const label = TaskPriorityLabels[priority];
 
+            const mapIcon = {
+                [TaskPriority.HIGH]: AlertTriangle,
+                [TaskPriority.MEDIUM]: AlertCircle,
+                [TaskPriority.LOW]: Smile
+            }
+
             return h(PriorityCell, {
-                task: row.original,
                 priority: label,
                 variant,
+                icon: mapIcon[priority]
             });
         },
     },
@@ -67,10 +74,15 @@ export const columns: ColumnDef<Task>[] = [
 
             const label = TaskStatusLabels[status];
 
+            const mapIcon = {
+                [TaskStatus.DONE]: CheckCircle,
+                [TaskStatus.PENDING]: Clock,
+            }
+
             return h(StatusCell, {
-                task: row.original,
                 status: label,
                 variant,
+                icon: mapIcon[status]
             });
         }
     },
@@ -80,12 +92,12 @@ export const columns: ColumnDef<Task>[] = [
         cell: (row) => {
             const date = new Date(row.getValue() as string);
 
-            // Format date with day, month and year
-            const day = date.getUTCDate();
-            const month = date.getUTCMonth() + 1;
-            const year = date.getUTCFullYear();
-
-            return `${day}/${month}/${year}`;
+            return date.toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'UTC'
+            });
         },
     },
     {

@@ -29,7 +29,7 @@ import { TaskStatus, type Task } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
-import { CircleX } from "lucide-vue-next";
+import { CircleX, Search, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { columns } from './columns';
 
 const store = useTaskStore();
@@ -106,37 +106,44 @@ const table = useVueTable({
         <CircleX data-icon="inline-end" />
     </IconBadge>
 
-    <div class="flex flex-wrap gap-4 mb-4">
-        <!-- Filter by title -->
-        <div>
-            <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
+        <!-- Filters -->
+        <div class="flex flex-wrap items-center gap-4">
+            <!-- Filter by title -->
+            <div class="flex gap-2 items-center justify-center">
+                <Search />
+                <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
+            </div>
+
+            <!-- Filter by status -->
+            <Select default-value="" v-model="statusFilter">
+                <SelectTrigger>
+                    <SelectValue placeholder="Filtar por estado" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectItem :value="null">Todos los estados</SelectItem>
+                        <SelectItem :value="TaskStatus.PENDING">Pendiente</SelectItem>
+                        <SelectItem :value="TaskStatus.DONE" class="text-green-500">Completada</SelectItem>
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+
+            <!-- Filter by due date -->
+            <DuePicker :clearable="true" v-model="dateFilter" />
         </div>
 
-        <!-- Filter by status -->
-        <Select default-value="" v-model="statusFilter">
-            <SelectTrigger>
-                <SelectValue placeholder="Filtar por estado" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    <SelectItem :value="null">Todos los estados</SelectItem>
-                    <SelectItem :value="TaskStatus.PENDING">Pendiente</SelectItem>
-                    <SelectItem :value="TaskStatus.DONE" class="text-green-500">Completada</SelectItem>
-                </SelectGroup>
-            </SelectContent>
-        </Select>
+        <div>
+            <CreateDialog />
+        </div>
 
-        <!-- Filter by due date -->
-        <DuePicker v-model="dateFilter" />
-
-        <CreateDialog />
     </div>
 
     <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c] mb-4">
         <Table>
             <TableHeader>
                 <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-                    <TableHead v-for="header in headerGroup.headers" :key="header.id"
+                    <TableHead class="font-bold" v-for="header in headerGroup.headers" :key="header.id"
                         @click="header.column.getToggleSortingHandler()?.($event)">
                         <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
                             :props="header.getContext()" />
@@ -172,14 +179,14 @@ const table = useVueTable({
     <div className="flex items-center justify-center space-x-2 py-4 gap-3">
         <Button variant="outline" :disabled="store.pagination.page === 1 || store.loading"
             @click="store.fetchTasks(store.pagination.page - 1)">
-            Anterior
+            <ChevronLeft />
         </Button>
 
         <span>Página {{ store.pagination.page }} de {{ store.pagination.totalPages }}</span>
 
         <Button variant="outline" :disabled="store.pagination.page === store.pagination.totalPages || store.loading"
             @click="store.fetchTasks(store.pagination.page + 1)">
-            Siguiente
+            <ChevronRight />
         </Button>
     </div>
 </template>

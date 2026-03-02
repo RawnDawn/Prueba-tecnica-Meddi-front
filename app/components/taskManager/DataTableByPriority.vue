@@ -20,6 +20,7 @@ import {
 import { useTaskStore } from "~/stores/taskStore"
 import { columns } from './columns';
 import type { TaskPriority } from '~/types/task';
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 const props = defineProps<{
     priority: TaskPriority
@@ -54,7 +55,7 @@ const table = useVueTable({
         <Table>
             <TableHeader>
                 <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-                    <TableHead v-for="header in headerGroup.headers" :key="header.id"
+                    <TableHead class="font-bold" v-for="header in headerGroup.headers" :key="header.id"
                         @click="header.column.getToggleSortingHandler()?.($event)">
                         <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
                             :props="header.getContext()" />
@@ -91,7 +92,7 @@ const table = useVueTable({
         <Button variant="outline"
             :disabled="store.tasksByPriority[props.priority].pagination.page === 1 || store.loading"
             @click="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page - 1, 10)">
-            Anterior
+            <ChevronLeft />
         </Button>
 
         <span>Página {{ store.tasksByPriority[props.priority].pagination.page }} de {{
@@ -100,7 +101,7 @@ const table = useVueTable({
         <Button variant="outline"
             :disabled="store.tasksByPriority[props.priority].pagination.page === store.tasksByPriority[props.priority].pagination.totalPages || store.loading"
             @click="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page + 1, 10)">
-            Siguiente
+            <ChevronRight />
         </Button>
     </div>
 </template>

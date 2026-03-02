@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import type { Component } from 'vue';
 import Badge from '~/components/ui/badge/Badge.vue';
 
-defineProps<{
-    task?: {
-        _id?: string
-    };
+const props = defineProps<{
     priority: string;
     variant: 'default' | 'secondary' | 'destructive' | 'outline';
+    icon?: Component;
 }>()
+
 </script>
 
 <template>
     <Badge :variant="variant">
-        <button>
-            {{ priority }}
-        </button>
+        {{ priority }}
+        <component v-if="icon" :is="icon"/>
     </Badge>
 </template>

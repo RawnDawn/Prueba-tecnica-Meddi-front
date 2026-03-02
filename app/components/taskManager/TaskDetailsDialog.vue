@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 
 const props = defineProps<{
     id: string,
+    open: boolean
 }>()
 
 // dialog state
@@ -80,10 +81,22 @@ const timeLeft = (dueDate: string | Date) => {
     return `${diffMinutes} minuto${diffMinutes > 1 ? "s" : ""}`;
 };
 
+// Manage dialog closing with on top close button
+const localOpen = ref(props.open)
+
+// sync localOpen with props.open
+watch(() => props.open, val => {
+    localOpen.value = val
+})
+
+// sync props.open with localOpen
+watch(localOpen, val => {
+    emit('update:open', val)
+})
 </script>
 
 <template>
-    <Dialog :open="open" @openChange="(val: boolean) => open = val">
+    <Dialog v-model:open="localOpen">
         <slot name="trigger" :openDialog="openDialog" />
 
         <DialogContent @keydown.esc="emit('update:open', false)" class="sm:max-w-sm">

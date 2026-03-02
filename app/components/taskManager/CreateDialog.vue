@@ -30,6 +30,7 @@ import { useTaskStore } from "~/stores/taskStore"
 import DuePicker from "~/components/taskManager/DuePicker.vue";
 import Alert from "../common/Alert.vue";
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper";
+import { Plus } from "lucide-vue-next";
 
 const store = useTaskStore();
 
@@ -116,7 +117,9 @@ watch(open, (val) => {
 <template>
     <Dialog v-model:open="open">
         <DialogTrigger asChild>
-            <Button variant="outline">Nueva tarea</Button>
+            <Button variant="default">
+                <Plus /> Nueva tarea
+            </Button>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-sm">
