@@ -259,3 +259,47 @@ export const markAsPending = async (
 
     return body
 }
+
+/**
+ * Get top days with most created tasks
+ * @returns 
+ */
+export const getTopCreatedDays = async () => {
+    const res = await fetch(`${TASK_URL}/count/created/days`)
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
+ * Get top days with most completed tasks
+ * @returns 
+ */
+export const getTopCompletedDays = async () => {
+    const res = await fetch(`${TASK_URL}/count/completed/days`)
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}

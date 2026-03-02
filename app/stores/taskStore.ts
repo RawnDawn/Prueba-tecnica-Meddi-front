@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone, markAsPending, getTasksByPriority, getTasksByStatus } from "~/services/taskService"
+import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone, markAsPending, getTasksByPriority, getTasksByStatus, getTopCompletedDays, getTopCreatedDays } from "~/services/taskService"
 import { TaskStatus, type Task, type TaskFilters, type TaskPriority } from "~/types/task"
 
 interface Pagination {
@@ -26,6 +26,10 @@ export const useTaskStore = defineStore('tasks', {
     // Counters
     priorityCount: {} as Record<string, number>,
     statusCount: {} as Record<string, number>,
+
+    // Kpi days
+    topCreatedDays: {} as Record<string, number>,
+    topCompletedDays: {} as Record<string, number>,
 
     loading: false,
     error: null as string | null,
@@ -78,7 +82,7 @@ export const useTaskStore = defineStore('tasks', {
         this.loading = false
       }
     },
-    
+
     // Get task by priority count
     async getPriorityCount() {
       this.loading = true
@@ -118,12 +122,16 @@ export const useTaskStore = defineStore('tasks', {
         const res = await createTask(task)
         this.tasks.push(res.data)
 
-        // Agregar también a tasksByPriority si corresponde
+        // Add to task by priority if it is the case
         const prio = res.data.priority as TaskPriority
         if (!this.tasksByPriority[prio]) {
           this.tasksByPriority[prio] = { tasks: [], pagination: { page: 1, total: 0, totalPages: 1 } }
         }
         this.tasksByPriority[prio].tasks.push(res.data)
+
+        // Check created days counter
+        this.getTopCreatedDays();
+
       } catch (err: any) {
         this.error = err.message
       } finally {
@@ -199,6 +207,9 @@ export const useTaskStore = defineStore('tasks', {
         await markAsDone(id)
 
         this.updateTaskStatus(id, TaskStatus.DONE)
+
+        // Check completed days counter
+        this.getTopCompletedDays()
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -216,6 +227,39 @@ export const useTaskStore = defineStore('tasks', {
         await markAsPending(id)
 
         this.updateTaskStatus(id, TaskStatus.PENDING)
+
+        // Check completed days counter
+        this.getTopCompletedDays()
+      } catch (err: any) {
+        this.error = getTaskErrorMessage(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // get top created days
+    async getTopCreatedDays() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const res = await getTopCreatedDays()
+        this.topCreatedDays = res.data
+      } catch (err: any) {
+        this.error = getTaskErrorMessage(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // get top completed days
+    async getTopCompletedDays() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const res = await getTopCompletedDays()
+        this.topCompletedDays = res.data
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
