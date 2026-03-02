@@ -11,9 +11,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { CheckCircle, EllipsisVertical, Eye, Pencil, Trash } from 'lucide-vue-next'
 
-import TaskDetailsDialog from './TaskDetailsDialog.vue'
-import UpdateTaskDialog from './UpdateTaskDialog.vue'
-import DeleteTaskDialog from './DeleteTaskDialog.vue'
+import DetailsDialog from '~/components/taskManager/DetailsDialog.vue'
+import UpdateDialog from './UpdateDialog.vue'
+import DeleteDialog from './DeleteDialog.vue'
 import { TaskStatus } from '~/types/task'
 import { useTaskStore } from '~/stores/taskStore'
 
@@ -74,7 +74,7 @@ const markAsPending = async () => {
         </DropdownMenuContent>
     </DropdownMenu>
 
-    <TaskDetailsDialog :id="props.task._id" v-model:open="showTaskDialog" />
-    <UpdateTaskDialog :id="props.task._id" v-model:open="updateTaskDialog" />
-    <DeleteTaskDialog :id="props.task._id" v-model:open="deleteTaskDialog" />
+    <DetailsDialog :id="props.task._id" v-model:open="showTaskDialog" />
+    <UpdateDialog :id="props.task._id" v-model:open="updateTaskDialog" />
+    <DeleteDialog :id="props.task._id" v-model:open="deleteTaskDialog" />
 </template>

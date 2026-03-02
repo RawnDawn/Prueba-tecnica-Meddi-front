@@ -6,8 +6,8 @@ import TableByPriority from "~/components/taskManager/TableByPriority.vue";
 import { TaskPriority } from "~/types/task";
 import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.vue";
 import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
-import MoreCreatedTask from "~/components/taskManager/MoreCreatedTask.vue";
-import MoreCompletedTask from "~/components/taskManager/MoreCompletedTask.vue";
+import TopCreatedTask from "~/components/taskManager/TopCreatedTask.vue";
+import TopCompletedTask from "~/components/taskManager/TopCompletedTask.vue";
 import { Separator } from "~/components/ui/separator";
 </script>
 
@@ -51,10 +51,10 @@ import { Separator } from "~/components/ui/separator";
           <StatusCounterChart class="md:col-span-1 xl:col-span-2" />
 
           <!-- 3 days with more CREATED tasks -->
-          <MoreCreatedTask class="md:col-span-1 xl:col-span-4" />
+          <TopCreatedTask class="md:col-span-1 xl:col-span-4" />
 
           <!-- 3 days with more COMPLETED tasks -->
-          <MoreCompletedTask class="md:col-span-1 xl:col-span-4" />
+          <TopCompletedTask class="md:col-span-1 xl:col-span-4" />
         </div>
       </div>
     </div>
