@@ -1,12 +1,13 @@
 <script setup lang="ts" generic="TData, TValue">
-import type { ColumnDef } from '@tanstack/vue-table';
+import type { ColumnDef, SortingState } from '@tanstack/vue-table';
 import { ref } from "vue";
 import {
     FlexRender,
     getCoreRowModel,
     getPaginationRowModel,
     useVueTable,
-    getFilteredRowModel
+    getFilteredRowModel,
+    getSortedRowModel
 } from '@tanstack/vue-table';
 import {
     Select,
@@ -31,11 +32,14 @@ const props = defineProps<{
     data: TData[]
 }>()
 
+// set sorting
+const sorting = ref<SortingState>([])
+
+// Set column filters
 const statusFilter = ref("")
 const dateFilter = ref("")
 const titleFilter = ref("")
 
-// Set column filters
 const columnFilters = computed(() => {
     const filters: { id: string; value: string }[] = [];
 
@@ -58,18 +62,28 @@ const table = useVueTable({
     get data() { return props.data },
     get columns() { return props.columns },
     state: {
+        get sorting() {
+            return sorting.value
+        },
+
         get columnFilters() {
             return columnFilters.value
         }
     },
+    onSortingChange: updaterOrValue => {
+        sorting.value = typeof updaterOrValue === 'function'
+            ? updaterOrValue(sorting.value)
+            : updaterOrValue
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel()
 })
 </script>
 
 <template>
-    <div class="flex gap-4">
+    <div class="flex flex-wrap gap-4">
         <!-- Filter by title -->
         <div>
             <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
@@ -98,9 +112,16 @@ const table = useVueTable({
         <Table>
             <TableHeader>
                 <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-                    <TableHead v-for="header in headerGroup.headers" :key="header.id">
+                    <TableHead v-for="header in headerGroup.headers" :key="header.id"
+                        @click="header.column.getToggleSortingHandler()?.($event)">
                         <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
                             :props="header.getContext()" />
+                        <!-- Show icon sort -->
+                        {{
+                            header.column.getIsSorted()
+                                ? { asc: '▲', desc: '▼' }[header.column.getIsSorted() as 'asc' | 'desc']
+                                : ''
+                        }}
                     </TableHead>
                 </TableRow>
             </TableHeader>

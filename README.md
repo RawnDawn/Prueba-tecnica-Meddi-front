@@ -6,7 +6,6 @@ Desarrollar una interfaz de usuario para una aplicación web que permita gestion
 
 - Agrupar tareas por prioridad (Una lista por prioridad)
 - Ordenar tareas por fecha de creación
-- Buscar tareas por titulo
 - Mostrar la cantidad de tareas por prioridad (Gráfica de tipo dona, barra, etc.)
 - Mostrar la cantidad de tareas por estado (Gráfica de tipo dona, barra, etc.)
 - Mostrar ranking de los tres días de la semana con mas tareas CREADAS
