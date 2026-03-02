@@ -5,13 +5,11 @@ import {
     getCoreRowModel,
     getPaginationRowModel,
     useVueTable,
-
 } from '@tanstack/vue-table';
 import { useTaskStore } from "~/stores/taskStore"
 import { columns } from './columns';
 import type { TaskPriority } from '~/types/task';
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { DataTable } from '../ui/data-table';
+import { DataTable, Pagination } from '~/components/ui/data-table';
 
 const props = defineProps<{
     priority: TaskPriority
@@ -44,8 +42,16 @@ const table = useVueTable({
 
     <DataTable :table="table" :dataCount="columns.length" />
 
-    <div class="flex items-center justify-center space-x-2 py-4 gap-3">
-        <Button variant="outline"
+    <Pagination :disabled-preview="store.tasksByPriority[props.priority].pagination.page === 1 || store.loading"
+        :disabled-next="store.tasksByPriority[props.priority].pagination.page === store.tasksByPriority[props.priority].pagination.totalPages || store.loading"
+        :page="store.tasksByPriority[props.priority].pagination.page"
+        :total-pages="store.tasksByPriority[props.priority].pagination.totalPages"
+        @click-prev="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page - 1, 10)"
+        @click-next="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page + 1, 10)" />
+
+    <!-- Old pagination -->
+    <!-- <div class="flex items-center justify-center space-x-2 py-4 gap-3">
+        <Button class="w-11 h-11 rounded-full" variant="outline"
             :disabled="store.tasksByPriority[props.priority].pagination.page === 1 || store.loading"
             @click="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page - 1, 10)">
             <ChevronLeft />
@@ -54,10 +60,10 @@ const table = useVueTable({
         <span>Página {{ store.tasksByPriority[props.priority].pagination.page }} de {{
             store.tasksByPriority[props.priority].pagination.totalPages }}</span>
 
-        <Button variant="outline"
+        <Button class="w-11 h-11 rounded-full" variant="outline"
             :disabled="store.tasksByPriority[props.priority].pagination.page === store.tasksByPriority[props.priority].pagination.totalPages || store.loading"
             @click="store.fetchTasksByPriority(props.priority, store.tasksByPriority[props.priority].pagination.page + 1, 10)">
             <ChevronRight />
         </Button>
-    </div>
+    </div> -->
 </template>

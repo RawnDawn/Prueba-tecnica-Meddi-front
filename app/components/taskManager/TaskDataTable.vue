@@ -20,9 +20,9 @@ import { TaskStatus, type Task } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
-import { CircleX, Search, ChevronLeft, ChevronRight, Info } from "lucide-vue-next";
+import { CircleX, Search, Info } from "lucide-vue-next";
 import { columns } from './columns';
-import { DataTable } from '../ui/data-table';
+import { DataTable, Pagination } from '~/components/ui/data-table';
 
 
 const store = useTaskStore();
@@ -137,17 +137,26 @@ const table = useVueTable({
 
     <DataTable :table="table" :dataCount="columns.length" />
 
-    <div class="flex items-center justify-center space-x-2 py-4 gap-3">
-        <Button variant="outline" :disabled="store.pagination.page === 1 || store.loading"
+    <Pagination :disabled-preview="store.pagination.page === 1 || store.loading"
+        :disabled-next="store.pagination.page === store.pagination.totalPages || store.loading"
+        :page="store.pagination.page" :total-pages="store.pagination.totalPages"
+        @click-prev="store.fetchTasks(store.pagination.page - 1)"
+        @click-next="store.fetchTasks(store.pagination.page + 1)" />
+
+    <!-- Old pagination -->
+    <!-- <div class="flex items-center justify-center space-x-2 py-4 gap-3">
+        <Button class="w-11 h-11 rounded-full" variant="outline"
+            :disabled="store.pagination.page === 1 || store.loading"
             @click="store.fetchTasks(store.pagination.page - 1)">
             <ChevronLeft />
         </Button>
 
         <span>Página {{ store.pagination.page }} de {{ store.pagination.totalPages }}</span>
 
-        <Button variant="outline" :disabled="store.pagination.page === store.pagination.totalPages || store.loading"
+        <Button class="w-11 h-11 rounded-full" variant="outline"
+            :disabled="store.pagination.page === store.pagination.totalPages || store.loading"
             @click="store.fetchTasks(store.pagination.page + 1)">
             <ChevronRight />
         </Button>
-    </div>
+    </div> -->
 </template>
