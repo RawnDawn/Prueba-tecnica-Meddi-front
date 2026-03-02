@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue"
 import { parseDate, type DateValue } from "@internationalized/date"
-import { Calendar } from "~/components/ui/calendar"
-import { Button } from "~/components/ui/button"
 import { Calendar as CalendarIcon } from "lucide-vue-next"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger
-} from "~/components/ui/popover"
 import { X } from "lucide-vue-next";
 
 const props = defineProps<{
@@ -78,7 +71,7 @@ const clearDate = () => {
             <Button variant="outline" class="w-full lg:w-[280px] justify-start text-left font-normal">
                 <CalendarIcon class="mr-2 h-4 w-4" />
                 <span :class="formattedDate === DEFAULT_MESSAGE ? 'text-gray-500' : 'text-white'">{{ formattedDate
-                    }}</span>
+                }}</span>
             </Button>
         </PopoverTrigger>
 

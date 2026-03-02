@@ -1,19 +1,9 @@
 <script setup lang="ts">
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-
-import { Button } from '@/components/ui/button'
 import { CheckCircle, EllipsisVertical, Eye, Pencil, Trash } from 'lucide-vue-next'
 
 import DetailsDialog from '~/components/taskManager/DetailsDialog.vue'
-import UpdateDialog from './UpdateDialog.vue'
-import DeleteDialog from './DeleteDialog.vue'
+import UpdateDialog from '~/components/taskManager/UpdateDialog.vue'
+import DeleteDialog from '~/components/taskManager/DeleteDialog.vue'
 import { TaskStatus } from '~/types/task'
 import { useTaskStore } from '~/stores/taskStore'
 

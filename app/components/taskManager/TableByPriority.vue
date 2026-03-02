@@ -7,7 +7,7 @@ import {
     useVueTable,
 } from '@tanstack/vue-table';
 import { useTaskStore } from "~/stores/taskStore"
-import { columns } from './columns';
+import { columns } from '~/components/taskManager/columns';
 import type { TaskPriority } from '~/types/task';
 import { DataTable, Pagination } from '~/components/ui/data-table';
 

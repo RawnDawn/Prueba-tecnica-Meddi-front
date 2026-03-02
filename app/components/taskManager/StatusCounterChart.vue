@@ -5,28 +5,16 @@ import type {
 
 import { Donut } from "@unovis/ts"
 import { VisDonut, VisSingleContainer } from "@unovis/vue"
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    componentToString,
-} from "@/components/ui/chart"
+import { ChartTooltipContent, componentToString } from "@/components/ui/chart"
 import { TaskStatus } from "~/types/task"
-import { useTaskStore } from "#imports"
+import { useTaskStore } from "~/stores/taskStore"
 import { Circle } from "lucide-vue-next"
 
 const store = useTaskStore();
 await store.getStatusCount();
 
 const chartData = [
-    { status: TaskStatus.PENDING, count: store.statusCount.pending ?? 0, fill: "#fff"},
+    { status: TaskStatus.PENDING, count: store.statusCount.pending ?? 0, fill: "#fff" },
     { status: TaskStatus.DONE, count: store.statusCount.done ?? 0, fill: "#1d9df0" },
 ]
 type Data = typeof chartData[number]
@@ -56,8 +44,7 @@ const chartConfig = {
             <ChartContainer :config="chartConfig" class="mx-auto aspect-square max-h-[250px]">
                 <VisSingleContainer :data="chartData" :margin="{ top: 30, bottom: 30 }">
                     <VisDonut :value="(d: Data) => d.count"
-                        :color="(d: Data) => chartConfig[d.status as keyof typeof chartConfig].color"
-                        :arc-width="30" />
+                        :color="(d: Data) => chartConfig[d.status as keyof typeof chartConfig].color" :arc-width="30" />
                     <ChartTooltip :triggers="{
                         [Donut.selectors.segment]: componentToString(chartConfig, ChartTooltipContent, { hideLabel: true })!,
                     }" />

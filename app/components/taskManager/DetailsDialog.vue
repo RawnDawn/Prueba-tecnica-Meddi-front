@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import { ref, watchEffect } from "vue"
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
 import { useTaskStore } from "~/stores/taskStore"
 import { TaskStatus, type Task } from "~/types/task";
-import { TaskPriority } from "../../types/task";
-import { TaskPriorityLabels, TaskStatusLabels } from "./columns";
-import { Badge } from "@/components/ui/badge";
+import { TaskPriority } from "~/types/task";
+import { TaskPriorityLabels, TaskStatusLabels } from "~/components/taskManager/columns";
 
 const props = defineProps<{
     id: string,
@@ -24,11 +15,11 @@ const open = ref(false)
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 const openDialog = () => {
     open.value = true
-    emit('update:open', true) 
+    emit('update:open', true)
 }
 const closeDialog = () => {
     open.value = false
-    emit('update:open', false) 
+    emit('update:open', false)
 }
 
 // Get task details

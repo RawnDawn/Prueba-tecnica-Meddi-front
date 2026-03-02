@@ -8,21 +8,12 @@ import {
     getFilteredRowModel,
     getSortedRowModel
 } from '@tanstack/vue-table';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '~/components/ui/select'
 import { TaskStatus } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX, Search, Info } from "lucide-vue-next";
-import { columns } from './columns';
-import { DataTable, Pagination } from '~/components/ui/data-table';
+import { columns } from '~/components/taskManager/columns';
 import { useTaskFilterTable } from '~/composables/useTaskFilterTable';
 
 const store = useTaskStore();

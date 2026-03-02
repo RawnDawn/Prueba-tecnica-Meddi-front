@@ -5,21 +5,9 @@ import type {
 
 import { Donut } from "@unovis/ts"
 import { VisDonut, VisSingleContainer } from "@unovis/vue"
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    componentToString,
-} from "@/components/ui/chart"
+import { ChartTooltipContent, componentToString, } from "@/components/ui/chart"
 import { TaskPriority } from "~/types/task"
-import { useTaskStore } from "#imports"
+import { useTaskStore } from "~/stores/taskStore"
 import { Circle } from "lucide-vue-next"
 
 const store = useTaskStore();

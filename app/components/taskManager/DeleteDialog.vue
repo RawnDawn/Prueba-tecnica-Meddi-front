@@ -1,15 +1,4 @@
 <script setup lang="ts">
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '~/components/ui/dialog';
-import { Button } from '~/components/ui/button'
-import { Separator } from '~/components/ui/separator'
 import { ref, watch } from 'vue'
 import { useTaskStore } from '~/stores/taskStore'
 
