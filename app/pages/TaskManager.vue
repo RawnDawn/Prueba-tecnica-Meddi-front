@@ -4,7 +4,8 @@ import { columns } from "~/components/taskManager/columns";
 import TaskDataTable from "~/components/taskManager/TaskDataTable.vue";
 import TaskDataTableByPriority from "~/components/taskManager/TaskDataTableByPriority.vue";
 import { TaskPriority } from "~/types/task";
-
+import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.vue";
+import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
 </script>
 
 <template>
@@ -13,6 +14,19 @@ import { TaskPriority } from "~/types/task";
     <div class="flex flex-col gap-6">
 
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
+
+      <!-- KPIs -->
+      <div class="grid xl:grid-cols-5 gap-4">
+        <!-- Chart task per prio -->
+        <PriorityCounterChart/>
+  
+        <!-- Chart task per state -->
+         <StatusCounterChart/>
+  
+        <!-- 3 days with more CREATED tasks -->
+  
+        <!-- 3 days with more COMPLETED tasks -->
+      </div>
 
       <!-- CRUD -->
       <div class="mb-14">

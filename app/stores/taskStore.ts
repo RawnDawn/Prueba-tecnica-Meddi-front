@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone, markAsPending } from "~/services/taskService"
+import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone, markAsPending, getTasksByPriority, getTasksByStatus } from "~/services/taskService"
 import { TaskStatus, type Task, type TaskFilters, type TaskPriority } from "~/types/task"
 
 interface Pagination {
@@ -22,6 +22,10 @@ export const useTaskStore = defineStore('tasks', {
 
     // Tasks by priority
     tasksByPriority: {} as Record<TaskPriority, TaskState>,
+
+    // Counters
+    priorityCount: {} as Record<string, number>,
+    statusCount: {} as Record<string, number>,
 
     loading: false,
     error: null as string | null,
@@ -68,6 +72,36 @@ export const useTaskStore = defineStore('tasks', {
           total: res.total,
           totalPages: res.totalPages
         }
+      } catch (err: any) {
+        this.error = getTaskErrorMessage(err)
+      } finally {
+        this.loading = false
+      }
+    },
+    
+    // Get task by priority count
+    async getPriorityCount() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const res = await getTasksByPriority()
+        this.priorityCount = res.data
+      } catch (err: any) {
+        this.error = getTaskErrorMessage(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Get task by status count
+    async getStatusCount() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const res = await getTasksByStatus()
+        this.statusCount = res.data
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -189,13 +223,17 @@ export const useTaskStore = defineStore('tasks', {
       }
     },
 
-    // Helper interno para actualizar status en todas las listas
+    // Helper to update internal task status
     updateTaskStatus(id: string, status: TaskStatus) {
-      this.tasks = this.tasks.map(t => t._id === id ? { ...t, taskStatus: status } : t)
+      // Find task by id and update his status
+      this.tasks = this.tasks
+        .map(task => task._id === id ? { ...task, taskStatus: status } : task)
 
+      // in task by prio, iterate, find by id and update the status too
       for (const prio in this.tasksByPriority) {
         this.tasksByPriority[prio as TaskPriority].tasks =
-          this.tasksByPriority[prio as TaskPriority].tasks.map(t => t._id === id ? { ...t, taskStatus: status } : t)
+          this.tasksByPriority[prio as TaskPriority].tasks
+            .map(task => task._id === id ? { ...task, taskStatus: status } : task)
       }
     }
   }

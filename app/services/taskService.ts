@@ -44,6 +44,50 @@ export const getTasks = async (
 }
 
 /**
+ * Get count of tasks by priority
+ * @returns 
+ */
+export const getTasksByPriority = async () => {
+    const res = await fetch(`${TASK_URL}/count/priority`)
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
+ * Get count of tasks by status
+ * @returns 
+ */
+export const getTasksByStatus = async () => {
+    const res = await fetch(`${TASK_URL}/count/status`)
+
+    const body = await res.json()
+
+    if (!res.ok) {
+        const errorCode = body.error as TaskErrorCode;
+
+        const message =
+            TASK_ERROR_MESSAGES[errorCode] ??
+            DEFAULT_ERROR_MESSAGE;
+
+        throw new Error(message);
+    }
+
+    return body
+}
+
+/**
  * Create a new task
  * @param task 
  * @returns 
