@@ -11,13 +11,14 @@ import { useTaskStore } from "~/stores/taskStore"
 import { Circle } from "lucide-vue-next"
 
 const store = useTaskStore();
+
 await store.getStatusCount();
 
-const chartData = [
+const chartData = computed(() => [
     { status: TaskStatus.PENDING, count: store.statusCount.pending ?? 0, fill: "#fff" },
     { status: TaskStatus.DONE, count: store.statusCount.done ?? 0, fill: "#1d9df0" },
-]
-type Data = typeof chartData[number]
+])
+type Data = typeof chartData.value[number]
 
 const chartConfig = {
     count: {

@@ -21,10 +21,12 @@ const deleteTaskDialog = ref(false)
 const store = useTaskStore()
 const markAsDone = async () => {
     await store.markAsDone(props.task._id)
+    await store.getTopCompletedDays()
     props.task.status = TaskStatus.DONE
 }
 const markAsPending = async () => {
     await store.markAsPending(props.task._id)
+    await store.getTopCompletedDays()
     props.task.status = TaskStatus.PENDING
 }
 </script>

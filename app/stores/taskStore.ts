@@ -130,7 +130,7 @@ export const useTaskStore = defineStore('tasks', {
         this.tasksByPriority[prio].tasks.push(res.data)
 
         // Check created days counter
-        this.getTopCreatedDays();
+        await this.getTopCreatedDays();
 
       } catch (err: any) {
         this.error = err.message
@@ -167,9 +167,11 @@ export const useTaskStore = defineStore('tasks', {
 
         // Update in tasksByPriority if it exists
         const prio = res.data.priority as TaskPriority
-        if (this.tasksByPriority[prio]) {
-          this.tasksByPriority[prio].tasks = this.tasksByPriority[prio].tasks.map(t => t._id === id ? res.data : t)
-        }
+
+        await this.fetchTasks()
+        await this.fetchTasksByPriority(prio)
+
+        await this.getPriorityCount()
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -187,10 +189,12 @@ export const useTaskStore = defineStore('tasks', {
         this.tasks = this.tasks.filter(t => t._id !== id)
 
         // Remove from tasksByPriority
-        for (const prio in this.tasksByPriority) {
-          this.tasksByPriority[prio as TaskPriority].tasks =
-            this.tasksByPriority[prio as TaskPriority].tasks.filter(t => t._id !== id)
-        }
+        await this.fetchTasks()
+        await this.getPriorityCount()
+        await this.getStatusCount()
+        await this.getTopCompletedDays()
+        await this.getTopCreatedDays()
+
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -206,10 +210,11 @@ export const useTaskStore = defineStore('tasks', {
       try {
         await markAsDone(id)
 
-        this.updateTaskStatus(id, TaskStatus.DONE)
+        await this.updateTaskStatus(id, TaskStatus.DONE)
 
         // Check completed days counter
-        this.getTopCompletedDays()
+        await this.getTopCompletedDays()
+        await this.getStatusCount()
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -225,10 +230,12 @@ export const useTaskStore = defineStore('tasks', {
       try {
         await markAsPending(id)
 
-        this.updateTaskStatus(id, TaskStatus.PENDING)
+        await this.updateTaskStatus(id, TaskStatus.PENDING)
 
         // Check completed days counter
-        this.getTopCompletedDays()
+        await this.getTopCompletedDays()
+        await this.getStatusCount()
+
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -243,7 +250,9 @@ export const useTaskStore = defineStore('tasks', {
 
       try {
         const res = await getTopCreatedDays()
-        this.topCreatedDays = res.data
+
+        this.topCreatedDays = [...res.data]
+
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -258,7 +267,8 @@ export const useTaskStore = defineStore('tasks', {
 
       try {
         const res = await getTopCompletedDays()
-        this.topCompletedDays = res.data
+        this.topCompletedDays = [...res.data]
+
       } catch (err: any) {
         this.error = getTaskErrorMessage(err)
       } finally {
@@ -267,16 +277,16 @@ export const useTaskStore = defineStore('tasks', {
     },
 
     // Helper to update internal task status
-    updateTaskStatus(id: string, status: TaskStatus) {
+    async updateTaskStatus(id: string, status: TaskStatus) {
       // Find task by id and update his status
       this.tasks = this.tasks
-        .map(task => task._id === id ? { ...task, taskStatus: status } : task)
+        .map(task => task._id === id ? { ...task, status: status } : task)
 
       // in task by prio, iterate, find by id and update the status too
       for (const prio in this.tasksByPriority) {
         this.tasksByPriority[prio as TaskPriority].tasks =
           this.tasksByPriority[prio as TaskPriority].tasks
-            .map(task => task._id === id ? { ...task, taskStatus: status } : task)
+            .map(task => task._id === id ? { ...task, status: status } : task)
       }
     }
   }

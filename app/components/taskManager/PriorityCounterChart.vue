@@ -13,12 +13,12 @@ import { Circle } from "lucide-vue-next"
 const store = useTaskStore();
 await store.getPriorityCount();
 
-const chartData = [
-    { priority: TaskPriority.LOW, count: store.priorityCount.low ?? 0, fill: "#fff"},
+const chartData = computed(() => [
+    { priority: TaskPriority.LOW, count: store.priorityCount.low ?? 0, fill: "#fff" },
     { priority: TaskPriority.MEDIUM, count: store.priorityCount.medium ?? 0, fill: "#1d9df0" },
     { priority: TaskPriority.HIGH, count: store.priorityCount.high ?? 0, fill: "#9b1f26" },
-]
-type Data = typeof chartData[number]
+])
+type Data = typeof chartData.value[number]
 
 const chartConfig = {
     count: {

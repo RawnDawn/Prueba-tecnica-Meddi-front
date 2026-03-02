@@ -4,7 +4,7 @@ import { TaskPriority, TaskStatus } from '~/types/task'
 import { useTaskStore } from '~/stores/taskStore'
 import { getTaskErrorMessage } from '~/lib/taskErrorMapper'
 
-export function useTaskForm(taskId: string, open: boolean) {
+export function useUpdateTaskForm(taskId: string, open: boolean) {
     const store = useTaskStore()
 
     // Form state

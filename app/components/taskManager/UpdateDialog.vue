@@ -19,7 +19,7 @@ const {
     apiError,
     localOpen,
     handleSubmit
-} = useTaskForm(props.id, props.open)
+} = useUpdateTaskForm(props.id, props.open)
 
 // Sync localOpen with parent
 watch(localOpen, val => emit('update:open', val))
@@ -63,7 +63,7 @@ watch(() => props.open, val => localOpen.value = val)
                     <!-- prio -->
                     <Field :data-invalid="errors.priority">
                         <Label class="mb-3">Prioridad <span class="text-destructive">*</span></Label>
-                        <Select :default-value="selectedPriority"
+                        <Select :key="formData.priority" :default-value="selectedPriority"
                             @update:model-value="(value) => selectedPriority = value as TaskPriority">
                             <SelectTrigger :aria-invalid="errors.priority">
                                 <SelectValue placeholder="Selecciona la prioridad" />
@@ -84,7 +84,7 @@ watch(() => props.open, val => localOpen.value = val)
                     <!-- status -->
                     <Field :data-invalid="errors.status">
                         <Label class="mb-3">Estado <span class="text-destructive">*</span></Label>
-                        <Select :default-value="selectedStatus"
+                        <Select :key="formData.status" :default-value="selectedStatus"
                             @update:model-value="(value) => selectedStatus = value as TaskStatus">
                             <SelectTrigger :aria-invalid="errors.status">
                                 <SelectValue placeholder="Selecciona el estado" />
