@@ -186,7 +186,6 @@ export const useTaskStore = defineStore('tasks', {
 
       try {
         await deleteTask(id)
-        this.tasks = this.tasks.filter(t => t._id !== id)
 
         // Remove from tasksByPriority
         await this.fetchTasks()

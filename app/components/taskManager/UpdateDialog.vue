@@ -8,6 +8,9 @@ const props = defineProps<{
     open: boolean
 }>()
 
+const taskIdRef = ref(props.id)
+watch(() => props.id, val => taskIdRef.value = val)
+
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 
 const {
@@ -19,7 +22,7 @@ const {
     apiError,
     localOpen,
     handleSubmit
-} = useUpdateTaskForm(props.id, props.open)
+} = useUpdateTaskForm(taskIdRef, props.open)
 
 // Sync localOpen with parent
 watch(localOpen, val => emit('update:open', val))

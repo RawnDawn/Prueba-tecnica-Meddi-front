@@ -4,7 +4,7 @@ import { TaskPriority, TaskStatus } from '~/types/task'
 import { useTaskStore } from '~/stores/taskStore'
 import { getTaskErrorMessage } from '~/lib/taskErrorMapper'
 
-export function useUpdateTaskForm(taskId: string, open: boolean) {
+export function useUpdateTaskForm(taskIdRef: Ref<string>, open: boolean) {
     const store = useTaskStore()
 
     // Form state
@@ -34,33 +34,30 @@ export function useUpdateTaskForm(taskId: string, open: boolean) {
     }
 
     // Load task data when dialog opens
-    watch(
-        () => localOpen.value,
-        async (isOpen) => {
-            if (isOpen && taskId) {
-                try {
-                    const task = await store.showTask(taskId)
-                    if (task) {
-                        formData.value = {
-                            title: task.title || '',
-                            description: task.description || '',
-                            priority: task.priority,
-                            status: task.status,
-                            dueDate: task.dueDate || ''
-                        }
-                        selectedPriority.value = task.priority as TaskPriority
-                        selectedStatus.value = task.status as TaskStatus
-                        dueDate.value = task.dueDate || ''
+    watch([localOpen, taskIdRef], async ([isOpen, id]) => {
+        if (isOpen && id) {
+            try {
+                const task = await store.showTask(id)
+                if (task) {
+                    formData.value = {
+                        title: task.title || '',
+                        description: task.description || '',
+                        priority: task.priority,
+                        status: task.status,
+                        dueDate: task.dueDate || ''
                     }
-                } catch (err) {
-                    console.error('Error loading task:', err)
+                    selectedPriority.value = task.priority as TaskPriority
+                    selectedStatus.value = task.status as TaskStatus
+                    dueDate.value = task.dueDate || ''
                 }
-            } else if (!isOpen) {
-                resetForm()
+            } catch (err) {
+                console.error('Error loading task:', err)
+                apiError.value = 'No se pudo cargar la tarea'
             }
-        },
-        { immediate: true }
-    )
+        } else if (!isOpen) {
+            resetForm()
+        }
+    }, { immediate: true })
 
     // Submit form
     const handleSubmit = async () => {
@@ -81,7 +78,7 @@ export function useUpdateTaskForm(taskId: string, open: boolean) {
         }
 
         try {
-            await store.updateTask(taskId, {
+            await store.updateTask(taskIdRef.value, {
                 ...result.data,
                 priority: result.data.priority as TaskPriority,
                 status: result.data.status as TaskStatus
