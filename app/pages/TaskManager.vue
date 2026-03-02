@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Title from "~/components/common/Title.vue";
 import { columns } from "~/components/taskManager/columns";
-import TaskDataTable from "~/components/taskManager/TaskDataTable.vue";
-import TaskDataTableByPriority from "~/components/taskManager/TaskDataTableByPriority.vue";
+import TaskTable from "~/components/taskManager/TaskTable.vue";
+import TableByPriority from "~/components/taskManager/TableByPriority.vue";
 import { TaskPriority } from "~/types/task";
 import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.vue";
 import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
@@ -20,23 +20,23 @@ import { Separator } from "~/components/ui/separator";
 
       <!-- Tables -->
       <div class="xl:col-span-8">
-        <TaskDataTable :columns="columns" />
+        <TaskTable :columns="columns" />
 
         <Separator class="my-10" />
 
         <div class="grid grid-cols-1 gap-5">
           <Title title="Tareas por prioridad" subtitle="Consulta tus tareas separadas por prioridad." />
           <div>
-            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
-            <TaskDataTableByPriority :priority="TaskPriority.HIGH" />
+            <h2 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h2>
+            <TableByPriority :priority="TaskPriority.HIGH" />
           </div>
           <div>
-            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h1>
-            <TaskDataTableByPriority :priority="TaskPriority.MEDIUM" />
+            <h2 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h2>
+            <TableByPriority :priority="TaskPriority.MEDIUM" />
           </div>
           <div>
-            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
-            <TaskDataTableByPriority :priority="TaskPriority.LOW" />
+            <h2 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h2>
+            <TableByPriority :priority="TaskPriority.LOW" />
           </div>
         </div>
       </div>

@@ -16,14 +16,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '~/components/ui/select'
-import { TaskStatus, type Task } from '~/types/task';
+import { TaskStatus } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX, Search, Info } from "lucide-vue-next";
 import { columns } from './columns';
 import { DataTable, Pagination } from '~/components/ui/data-table';
-
+import { useTaskFilterTable } from '~/composables/useTaskFilterTable';
 
 const store = useTaskStore();
 
@@ -32,43 +32,15 @@ await store.fetchTasks();
 // set sorting
 const sorting = ref<SortingState>([])
 
-// Set column filters
-const statusFilter = ref("")
-const dateFilter = ref("")
-const titleFilter = ref("")
+// filters
+const { filters, columnFilters } = await useTaskFilterTable(
+    ['title', 'status', 'dueDate']
+);
 
-const columnFilters = computed(() => {
-    const filters: { id: string; value: string }[] = [];
-
-    if (statusFilter.value) {
-        filters.push({ id: "status", value: statusFilter.value });
-    }
-
-    if (dateFilter.value) {
-        filters.push({ id: "dueDate", value: dateFilter.value });
-    }
-
-    if (titleFilter.value) {
-        filters.push({ id: "title", value: titleFilter.value });
-    }
-
-    return filters;
-});
-
-// Fetch per filter
-watch(
-    [titleFilter, statusFilter, dateFilter],
-    async () => {
-        store.pagination.page = 1
-
-        await store.fetchTasks(store.pagination.page, 10, {
-            title: titleFilter.value,
-            status: statusFilter.value,
-            dueDate: dateFilter.value
-        })
-    },
-    { immediate: false } // only run when the value changes
-)
+// Get filters from the composable
+const titleFilter = filters.title;
+const statusFilter = filters.status;
+const dueDateFilter = filters.dueDate;
 
 const table = useVueTable({
     get data() { return store.tasks as TData[] },
@@ -126,7 +98,7 @@ const table = useVueTable({
             </Select>
 
             <!-- Filter by due date -->
-            <DuePicker :clearable="true" v-model="dateFilter" />
+            <DuePicker :clearable="true" v-model="dueDateFilter" />
         </div>
 
         <div class="col-span-full xl:col-span-2 xl:justify-self-end order-first xl:order-last">
@@ -143,20 +115,4 @@ const table = useVueTable({
         @click-prev="store.fetchTasks(store.pagination.page - 1)"
         @click-next="store.fetchTasks(store.pagination.page + 1)" />
 
-    <!-- Old pagination -->
-    <!-- <div class="flex items-center justify-center space-x-2 py-4 gap-3">
-        <Button class="w-11 h-11 rounded-full" variant="outline"
-            :disabled="store.pagination.page === 1 || store.loading"
-            @click="store.fetchTasks(store.pagination.page - 1)">
-            <ChevronLeft />
-        </Button>
-
-        <span>Página {{ store.pagination.page }} de {{ store.pagination.totalPages }}</span>
-
-        <Button class="w-11 h-11 rounded-full" variant="outline"
-            :disabled="store.pagination.page === store.pagination.totalPages || store.loading"
-            @click="store.fetchTasks(store.pagination.page + 1)">
-            <ChevronRight />
-        </Button>
-    </div> -->
 </template>
