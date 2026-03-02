@@ -6,6 +6,7 @@ import TaskDataTableByPriority from "~/components/taskManager/TaskDataTableByPri
 import { TaskPriority } from "~/types/task";
 import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.vue";
 import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
+import MoreCreatedTask from "~/components/taskManager/MoreCreatedTask.vue";
 </script>
 
 <template>
@@ -16,16 +17,24 @@ import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
       <!-- KPIs -->
-      <div class="grid xl:grid-cols-5 gap-4">
+      <div class="grid xl:grid-cols-4 gap-4">
         <!-- Chart task per prio -->
-        <PriorityCounterChart/>
-  
+        <PriorityCounterChart />
+
         <!-- Chart task per state -->
-         <StatusCounterChart/>
-  
+        <StatusCounterChart />
+
         <!-- 3 days with more CREATED tasks -->
-  
+        <MoreCreatedTask />
+
         <!-- 3 days with more COMPLETED tasks -->
+        <GCard title="Iniciativas Activas">
+          <ul class="list-disc list-inside space-y-2 text-sm">
+            <li>Programa "Fail Forward"</li>
+            <li>Sesiones de AMA (Ask Me Anything) con líderes</li>
+            <li>Retrospectivas sin culpa</li>
+          </ul>
+        </GCard>
       </div>
 
       <!-- CRUD -->

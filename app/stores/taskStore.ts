@@ -28,8 +28,8 @@ export const useTaskStore = defineStore('tasks', {
     statusCount: {} as Record<string, number>,
 
     // Kpi days
-    topCreatedDays: {} as Record<string, number>,
-    topCompletedDays: {} as Record<string, number>,
+    topCreatedDays: [] as { day: string; total: number }[],
+    topCompletedDays: [] as { day: string; total: number }[],
 
     loading: false,
     error: null as string | null,
