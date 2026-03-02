@@ -99,9 +99,9 @@ const table = useVueTable({
         <CircleX data-icon="inline-end" />
     </IconBadge>
 
-    <div class="flex flex-col-reverse lg:flex-row lg:items-center justify-between flex-wrap gap-5 lg:gap-4 mb-4">
-        <!-- Filters -->
-        <div class="flex flex-wrap items-center gap-5 lg:gap-4">
+    <div class="grid xl:grid-cols-12 gap-5 lg:gap-4 mb-4">
+        <!-- Filters  flex flex-wrap items-center -->
+        <div class="col-span-full grid grid-cols-1 gap-4 xl:gap-0 md:grid-cols-3 lg:grid-cols-4 xl:col-span-10">
             <!-- Filter by title -->
             <div class="flex gap-2 items-center justify-center  w-full lg:w-auto">
                 <Search class="w-5 h-5" />
@@ -129,7 +129,7 @@ const table = useVueTable({
             <DuePicker :clearable="true" v-model="dateFilter" />
         </div>
 
-        <div>
+        <div class="col-span-full xl:col-span-2 xl:justify-self-end order-first xl:order-last">
             <CreateDialog />
         </div>
 

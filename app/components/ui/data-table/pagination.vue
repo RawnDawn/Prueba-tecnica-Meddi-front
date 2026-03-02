@@ -13,7 +13,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="flex items-center justify-center space-x-2 py-4 gap-3">
+    <div class="flex items-center justify-center space-x-2 pt-4 gap-3">
         <Button class="w-11 h-11 rounded-full" variant="outline" :disabled="disabledPreview" @click="onClickPrev">
             <ChevronLeft />
         </Button>

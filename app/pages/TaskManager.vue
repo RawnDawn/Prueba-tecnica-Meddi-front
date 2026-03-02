@@ -8,38 +8,24 @@ import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.
 import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
 import MoreCreatedTask from "~/components/taskManager/MoreCreatedTask.vue";
 import MoreCompletedTask from "~/components/taskManager/MoreCompletedTask.vue";
+import { Separator } from "~/components/ui/separator";
 </script>
 
 <template>
   <GPageContainer>
 
-    <div class="flex flex-col gap-6">
+    <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
-      <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
 
-      <div class="grid grid-cols-1 gap-20">
-        <!-- KPIs -->
-        <div class="grid xl:grid-cols-4 gap-4">
-          <!-- Chart task per prio -->
-          <PriorityCounterChart />
+      <!-- Tables -->
+      <div class="xl:col-span-8">
+        <TaskDataTable :columns="columns" />
 
-          <!-- Chart task per state -->
-          <StatusCounterChart />
+        <Separator class="my-10" />
 
-          <!-- 3 days with more CREATED tasks -->
-          <MoreCreatedTask />
-
-          <!-- 3 days with more COMPLETED tasks -->
-          <MoreCompletedTask />
-        </div>
-
-        <!-- CRUD -->
-        <div>
-          <TaskDataTable :columns="columns" />
-        </div>
-
-        <!-- Per prio -->
-        <div class="grid grid-cols-1 gap-10 xl:grid-cols-3">
+        <div class="grid grid-cols-1 gap-5">
+          <Title title="Tareas por prioridad" subtitle="Consulta tus tareas separadas por prioridad." />
           <div>
             <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
             <TaskDataTableByPriority :priority="TaskPriority.HIGH" />
@@ -52,6 +38,23 @@ import MoreCompletedTask from "~/components/taskManager/MoreCompletedTask.vue";
             <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
             <TaskDataTableByPriority :priority="TaskPriority.LOW" />
           </div>
+        </div>
+      </div>
+
+      <!-- charts/kpis -->
+      <div class="xl:col-span-4">
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Chart task per prio -->
+          <PriorityCounterChart class="md:col-span-1 xl:col-span-2" />
+
+          <!-- Chart task per state -->
+          <StatusCounterChart class="md:col-span-1 xl:col-span-2" />
+
+          <!-- 3 days with more CREATED tasks -->
+          <MoreCreatedTask class="md:col-span-1 xl:col-span-4" />
+
+          <!-- 3 days with more COMPLETED tasks -->
+          <MoreCompletedTask class="md:col-span-1 xl:col-span-4" />
         </div>
       </div>
     </div>
