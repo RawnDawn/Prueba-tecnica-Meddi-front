@@ -2,6 +2,7 @@ import type { Task } from "~/types/task";
 import { API_BASE_URL } from "~/constants/api";
 import type { PaginatedResponse } from "~/types/paginatedResponse";
 import { DEFAULT_ERROR_MESSAGE, TASK_ERROR_MESSAGES, type TaskErrorCode } from "~/constants/taskErrors";
+import type { TaskFilters } from "~/types/task";
 
 const TASK_URL = API_BASE_URL + "/tasks";
 
@@ -13,9 +14,19 @@ const TASK_URL = API_BASE_URL + "/tasks";
  */
 export const getTasks = async (
     page = 1,
-    limit = 10
+    limit = 10,
+    filters: TaskFilters = {}
 ): Promise<PaginatedResponse<Task[]>> => {
-    const res = await fetch(`${TASK_URL}?page=${page}&limit=${limit}`)
+    // Define query params
+    const params = new URLSearchParams();
+    params.set("page", page.toString());
+    params.set("limit", limit.toString());
+    // filters
+    if (filters.priority) params.append('priority', filters.priority)
+    if (filters.status) params.append('status', filters.status)
+    if (filters.title) params.append('title', filters.title)
+
+    const res = await fetch(`${TASK_URL}?${params.toString()}`)
 
     const body = await res.json()
 

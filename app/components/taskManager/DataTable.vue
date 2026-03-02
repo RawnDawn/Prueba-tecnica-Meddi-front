@@ -25,12 +25,16 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { TaskStatus } from '~/types/task';
+import { TaskStatus, type Task } from '~/types/task';
+import CreateDialog from "~/components/taskManager/CreateDialog.vue";
+import { useTaskStore } from "~/stores/taskStore"
+import IconBadge from "~/components/common/IconBadge.vue"
+import { CircleX } from "lucide-vue-next";
+import { columns } from './columns';
 
-const props = defineProps<{
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-}>()
+const store = useTaskStore();
+
+await store.fetchTasks();
 
 // set sorting
 const sorting = ref<SortingState>([])
@@ -58,9 +62,24 @@ const columnFilters = computed(() => {
     return filters;
 });
 
+// Fetch per filter
+watch(
+    [titleFilter, statusFilter, dateFilter],
+    async () => {
+        store.page = 1
+
+        await store.fetchTasks(store.page, 10, {
+            title: titleFilter.value,
+            status: statusFilter.value,
+            dueDate: dateFilter.value
+        })
+    },
+    { immediate: false } // only run when the value changes
+)
+
 const table = useVueTable({
-    get data() { return props.data },
-    get columns() { return props.columns },
+    get data() { return store.tasks as TData[] },
+    get columns() { return columns as ColumnDef<TData, TValue>[] },
     state: {
         get sorting() {
             return sorting.value
@@ -83,6 +102,10 @@ const table = useVueTable({
 </script>
 
 <template>
+    <IconBadge v-if="store.error" :text="store.error" variant="destructive">
+        <CircleX data-icon="inline-end" />
+    </IconBadge>
+
     <div class="flex flex-wrap gap-4">
         <!-- Filter by title -->
         <div>
@@ -106,6 +129,7 @@ const table = useVueTable({
         <!-- Filter by due date -->
         <DuePicker v-model="dateFilter" />
 
+        <CreateDialog />
     </div>
 
     <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c]">
@@ -143,5 +167,19 @@ const table = useVueTable({
                 </template>
             </TableBody>
         </Table>
+    </div>
+
+    <div className="flex items-center justify-center space-x-2 py-4 gap-3">
+        <Button variant="outline" :disabled="store.page === 1 || store.loading"
+            @click="store.fetchTasks(store.page - 1)">
+            Anterior
+        </Button>
+
+        <span>Página {{ store.page }} de {{ store.totalPages }}</span>
+
+        <Button variant="outline" :disabled="store.page === store.totalPages || store.loading"
+            @click="store.fetchTasks(store.page + 1)">
+            Siguiente
+        </Button>
     </div>
 </template>

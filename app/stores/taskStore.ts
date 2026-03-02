@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { getTaskErrorMessage } from "~/lib/taskErrorMapper"
-import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone } from "~/services/taskService"
-import { TaskStatus, type Task } from "~/types/task"
+import { createTask, getTasks, showTask, updateTask, deleteTask, markAsDone} from "~/services/taskService"
+import { TaskStatus, type Task, type TaskFilters } from "~/types/task"
 
 export const useTaskStore = defineStore('tasks-test', {
     state: () => ({
@@ -15,12 +15,12 @@ export const useTaskStore = defineStore('tasks-test', {
         totalPages: 1
     }),
     actions: {
-        async fetchTasks(page = 1) {
+        async fetchTasks(page = 1, limit = 10, filters: TaskFilters = {}) {
             this.loading = true
             this.error = null
 
             try {
-                const res = await getTasks(page)
+                const res = await getTasks(page, limit, filters)
                 this.tasks = res.data
                 this.page = res.page
                 this.total = res.total

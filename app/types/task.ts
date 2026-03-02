@@ -9,6 +9,13 @@ export enum TaskStatus {
     DONE = "done"
 }
 
+export interface TaskFilters {
+    priority?: string
+    status?: string
+    title?: string
+    dueDate?: string
+}
+
 export interface Task {
     _id: string;
     title: string;

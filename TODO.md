@@ -1,6 +1,5 @@
 # TODO
   - group tasks by prio
-  - sort / order tasks by date
 
 - KPI
   - show in a chart the number of tasks per prio
