@@ -11,10 +11,9 @@ const TASK_URL = API_BASE_URL + "/tasks";
  * @param limit 
  * @returns 
  */
-// TODO - return this to 10
 export const getTasks = async (
     page = 1,
-    limit = 1
+    limit = 10
 ): Promise<PaginatedResponse<Task[]>> => {
     const res = await fetch(`${TASK_URL}?page=${page}&limit=${limit}`)
 
