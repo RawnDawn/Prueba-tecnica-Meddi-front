@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Title from "~/components/common/Title.vue";
 import { columns } from "~/components/taskManager/columns";
-import DataTable from "~/components/taskManager/DataTable.vue";
-import DataTableByPriority from "~/components/taskManager/DataTableByPriority.vue";
+import TaskDataTable from "~/components/taskManager/TaskDataTable.vue";
+import TaskDataTableByPriority from "~/components/taskManager/TaskDataTableByPriority.vue";
 import { TaskPriority } from "~/types/task";
 
 </script>
@@ -16,7 +16,7 @@ import { TaskPriority } from "~/types/task";
 
       <!-- CRUD -->
       <div class="mb-14">
-        <DataTable :columns="columns" />
+        <TaskDataTable :columns="columns" />
       </div>
 
 
@@ -24,15 +24,15 @@ import { TaskPriority } from "~/types/task";
       <div class="grid grid-cols-1 gap-10 xl:grid-cols-3">
         <div>
           <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
-          <DataTableByPriority :priority="TaskPriority.HIGH" />
+          <TaskDataTableByPriority :priority="TaskPriority.HIGH" />
         </div>
         <div>
           <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h1>
-          <DataTableByPriority :priority="TaskPriority.MEDIUM" />
+          <TaskDataTableByPriority :priority="TaskPriority.MEDIUM" />
         </div>
         <div>
           <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
-          <DataTableByPriority :priority="TaskPriority.LOW" />
+          <TaskDataTableByPriority :priority="TaskPriority.LOW" />
         </div>
       </div>
     </div>

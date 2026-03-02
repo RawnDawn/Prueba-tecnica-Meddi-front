@@ -2,7 +2,6 @@
 import type { ColumnDef, SortingState } from '@tanstack/vue-table';
 import { ref } from "vue";
 import {
-    FlexRender,
     getCoreRowModel,
     getPaginationRowModel,
     useVueTable,
@@ -17,20 +16,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '~/components/ui/select'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import { TaskStatus, type Task } from '~/types/task';
 import CreateDialog from "~/components/taskManager/CreateDialog.vue";
 import { useTaskStore } from "~/stores/taskStore"
 import IconBadge from "~/components/common/IconBadge.vue"
 import { CircleX, Search, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { columns } from './columns';
+import { DataTable } from '../ui/data-table';
+
 
 const store = useTaskStore();
 
@@ -139,42 +132,7 @@ const table = useVueTable({
 
     </div>
 
-    <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c] mb-4">
-        <Table>
-            <TableHeader>
-                <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-                    <TableHead class="font-bold" v-for="header in headerGroup.headers" :key="header.id"
-                        @click="header.column.getToggleSortingHandler()?.($event)">
-                        <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
-                            :props="header.getContext()" />
-                        <!-- Show icon sort -->
-                        {{
-                            header.column.getIsSorted()
-                                ? { asc: '▲', desc: '▼' }[header.column.getIsSorted() as 'asc' | 'desc']
-                                : ''
-                        }}
-                    </TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                <template v-if="table.getRowModel().rows?.length">
-                    <TableRow v-for="row in table.getRowModel().rows" :key="row.id"
-                        :data-state="row.getIsSelected() ? 'selected' : undefined">
-                        <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                        </TableCell>
-                    </TableRow>
-                </template>
-                <template v-else>
-                    <TableRow>
-                        <TableCell :colspan="columns.length" class="h-24 text-center">
-                            No results.
-                        </TableCell>
-                    </TableRow>
-                </template>
-            </TableBody>
-        </Table>
-    </div>
+    <DataTable :table="table" :dataCount="columns.length" />
 
     <div className="flex items-center justify-center space-x-2 py-4 gap-3">
         <Button variant="outline" :disabled="store.pagination.page === 1 || store.loading"
