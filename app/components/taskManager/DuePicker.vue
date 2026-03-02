@@ -66,23 +66,25 @@ const clearDate = () => {
 </script>
 
 <template>
-    <Popover>
-        <PopoverTrigger as-child>
-            <Button variant="outline" class="w-full lg:w-[280px] justify-start text-left font-normal">
-                <CalendarIcon class="mr-2 h-4 w-4" />
-                <span :class="formattedDate === DEFAULT_MESSAGE ? 'text-gray-500' : 'text-white'">{{ formattedDate
-                }}</span>
-            </Button>
-        </PopoverTrigger>
-
-        <PopoverContent class="w-auto p-0">
-            <Calendar mode="single" :v-model="internalDate" @update:model-value="updateDate" />
-        </PopoverContent>
-    </Popover>
-
-    <Button v-if="internalDate && props.clearable" @click="clearDate" variant="destructive"
-        class="justify-start text-left font-normal">
-        <X />
-        Borrar fecha
-    </Button>
+    <div class="flex items-center gap-2">
+        <Popover>
+            <PopoverTrigger as-child>
+                <Button variant="outline" class="w-full lg:w-[280px] justify-start text-left font-normal">
+                    <CalendarIcon class="mr-2 h-4 w-4" />
+                    <span :class="formattedDate === DEFAULT_MESSAGE ? 'text-gray-500' : 'text-white'">{{ formattedDate
+                    }}</span>
+                </Button>
+            </PopoverTrigger>
+    
+            <PopoverContent class="w-auto p-0">
+                <Calendar mode="single" :v-model="internalDate" @update:model-value="updateDate" />
+            </PopoverContent>
+        </Popover>
+    
+        <Button v-if="internalDate && props.clearable" @click="clearDate" variant="destructive"
+            class="justify-start text-left font-normal">
+            <X />
+            Borrar fecha
+        </Button>
+    </div>
 </template>
