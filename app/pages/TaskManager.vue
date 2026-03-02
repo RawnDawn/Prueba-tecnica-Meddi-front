@@ -16,10 +16,10 @@ import { Separator } from "~/components/ui/separator";
 
     <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+    <div class="grid grid-cols-1 2xl:grid-cols-12 gap-6">
 
       <!-- Tables -->
-      <div class="xl:col-span-8">
+      <div class="2xl:col-span-8">
         <TaskTable :columns="columns" />
 
         <Separator class="my-10" />
@@ -42,7 +42,7 @@ import { Separator } from "~/components/ui/separator";
       </div>
 
       <!-- charts/kpis -->
-      <div class="xl:col-span-4">
+      <div class="2xl:col-span-4">
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           <!-- Chart task per prio -->
           <PriorityCounterChart class="md:col-span-1 xl:col-span-2" />
