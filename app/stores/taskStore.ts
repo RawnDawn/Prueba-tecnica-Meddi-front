@@ -162,10 +162,10 @@ export const useTaskStore = defineStore('tasks', {
       try {
         const res = await updateTask(id, task)
 
-        // Actualizar en tasks general
+        // Update in general tasks
         this.tasks = this.tasks.map(t => t._id === id ? res.data : t)
 
-        // Actualizar en tasksByPriority si existe
+        // Update in tasksByPriority if it exists
         const prio = res.data.priority as TaskPriority
         if (this.tasksByPriority[prio]) {
           this.tasksByPriority[prio].tasks = this.tasksByPriority[prio].tasks.map(t => t._id === id ? res.data : t)
@@ -186,7 +186,7 @@ export const useTaskStore = defineStore('tasks', {
         await deleteTask(id)
         this.tasks = this.tasks.filter(t => t._id !== id)
 
-        // Eliminar de tasksByPriority
+        // Remove from tasksByPriority
         for (const prio in this.tasksByPriority) {
           this.tasksByPriority[prio as TaskPriority].tasks =
             this.tasksByPriority[prio as TaskPriority].tasks.filter(t => t._id !== id)
@@ -223,7 +223,6 @@ export const useTaskStore = defineStore('tasks', {
       this.error = null
 
       try {
-        // Asumiendo que markAsDone también sirve para revertir
         await markAsPending(id)
 
         this.updateTaskStatus(id, TaskStatus.PENDING)
