@@ -103,25 +103,26 @@ watch(localOpen, val => {
             <DialogHeader>
                 <div class="flex flex-col gap-2">
                     <DialogTitle>{{ task ? task.title : '' }}</DialogTitle>
-                    <div class="flex flex-row gap-2">
-                        <Badge v-if="task?.priority" :variant="priorityVariantMap[task.priority]">
-                            {{ TaskPriorityLabels[task.priority] }}
-                        </Badge>
-
-                        <Badge v-if="task?.status" :variant="statusVariantMap[task.status]">
-                            {{ TaskStatusLabels[task.status] }}
-                        </Badge>
-                    </div>
                 </div>
             </DialogHeader>
 
             <div class="mt-2">
+                <div class="flex flex-row gap-2 mb-4">
+                    <Badge v-if="task?.priority" :variant="priorityVariantMap[task.priority]">
+                        {{ TaskPriorityLabels[task.priority] }}
+                    </Badge>
+
+                    <Badge v-if="task?.status" :variant="statusVariantMap[task.status]">
+                        {{ TaskStatusLabels[task.status] }}
+                    </Badge>
+                </div>
+
                 <p class="mb-4" v-if="task?.dueDate">
                     <strong>Fecha de vencimiento:</strong>
                     {{ formatDate(task.dueDate) || 'Sin fecha devencimiento' }} ({{ timeLeft(task?.dueDate) }})
                 </p>
 
-                <p v-if="task?.description" class="mb-4">{{ task.description }}</p>
+                <p class="mb-4">{{ task?.description || 'Sin descripción' }}</p>
             </div>
 
             <div class="mt-4 flex justify-end">
