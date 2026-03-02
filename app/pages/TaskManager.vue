@@ -7,6 +7,7 @@ import { TaskPriority } from "~/types/task";
 import PriorityCounterChart from "~/components/taskManager/PriorityCounterChart.vue";
 import StatusCounterChart from "~/components/taskManager/StatusCounterChart.vue"
 import MoreCreatedTask from "~/components/taskManager/MoreCreatedTask.vue";
+import MoreCompletedTask from "~/components/taskManager/MoreCompletedTask.vue";
 </script>
 
 <template>
@@ -16,52 +17,44 @@ import MoreCreatedTask from "~/components/taskManager/MoreCreatedTask.vue";
 
       <Title title="Administrador de tareas" subtitle="Agrega y organiza tus tareas en un solo lugar." />
 
-      <!-- KPIs -->
-      <div class="grid xl:grid-cols-4 gap-4">
-        <!-- Chart task per prio -->
-        <PriorityCounterChart />
+      <div class="grid grid-cols-1 gap-20">
+        <!-- KPIs -->
+        <div class="grid xl:grid-cols-4 gap-4">
+          <!-- Chart task per prio -->
+          <PriorityCounterChart />
 
-        <!-- Chart task per state -->
-        <StatusCounterChart />
+          <!-- Chart task per state -->
+          <StatusCounterChart />
 
-        <!-- 3 days with more CREATED tasks -->
-        <MoreCreatedTask />
+          <!-- 3 days with more CREATED tasks -->
+          <MoreCreatedTask />
 
-        <!-- 3 days with more COMPLETED tasks -->
-        <GCard title="Iniciativas Activas">
-          <ul class="list-disc list-inside space-y-2 text-sm">
-            <li>Programa "Fail Forward"</li>
-            <li>Sesiones de AMA (Ask Me Anything) con líderes</li>
-            <li>Retrospectivas sin culpa</li>
-          </ul>
-        </GCard>
-      </div>
-
-      <!-- CRUD -->
-      <div class="mb-14">
-        <TaskDataTable :columns="columns" />
-      </div>
-
-
-      <!-- Per prio -->
-      <div class="grid grid-cols-1 gap-10 xl:grid-cols-3">
-        <div>
-          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
-          <TaskDataTableByPriority :priority="TaskPriority.HIGH" />
+          <!-- 3 days with more COMPLETED tasks -->
+          <MoreCompletedTask />
         </div>
+
+        <!-- CRUD -->
         <div>
-          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h1>
-          <TaskDataTableByPriority :priority="TaskPriority.MEDIUM" />
+          <TaskDataTable :columns="columns" />
         </div>
-        <div>
-          <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
-          <TaskDataTableByPriority :priority="TaskPriority.LOW" />
+
+        <!-- Per prio -->
+        <div class="grid grid-cols-1 gap-10 xl:grid-cols-3">
+          <div>
+            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Alta</h1>
+            <TaskDataTableByPriority :priority="TaskPriority.HIGH" />
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Media</h1>
+            <TaskDataTableByPriority :priority="TaskPriority.MEDIUM" />
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight mb-4">Prioridad Baja</h1>
+            <TaskDataTableByPriority :priority="TaskPriority.LOW" />
+          </div>
         </div>
       </div>
     </div>
 
-
   </GPageContainer>
 </template>
-
-<!-- TODO - remove date from calendar filter -->

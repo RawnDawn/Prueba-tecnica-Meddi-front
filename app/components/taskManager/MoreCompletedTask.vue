@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useTaskStore } from "~/stores/taskStore";
-import { Calendar } from "lucide-vue-next"
+import { Check } from "lucide-vue-next"
 
 const taskStore = useTaskStore();
 
-const days = computed(() => taskStore.topCreatedDays)
+const days = computed(() => taskStore.topCompletedDays)
 
 onMounted(() => {
-    taskStore.getTopCreatedDays()
+    taskStore.getTopCompletedDays()
 })
 
 const dayMap: Record<string, string> = {
@@ -33,15 +33,15 @@ const dayColorMap: Record<string, string> = {
 </script>
 
 <template>
-    <GCard title="Dias con más tareas creadas">
+    <GCard title="Dias con más tareas completadas">
         <div v-if="days.length === 0" class="text-center text-slate-400 py-10">
-            No hay tareas creadas aún
+            No hay tareas completadas aún
         </div>
 
         <div v-else v-for="day in days" :key="day.day"
             class="p-4 rounded-lg flex gap-2 mb-4 items-center justify-between" :class="dayColorMap[day.day]">
             <h3 class="flex items-center gap-2">
-                <Calendar class="w-5 h-5" />
+                <Check class="w-5 h-5" />
                 {{ dayMap[day.day] }}
             </h3>
             <p class="font-bold text-xl">{{ day.total }}</p>
