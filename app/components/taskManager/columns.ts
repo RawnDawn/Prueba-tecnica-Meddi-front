@@ -26,6 +26,7 @@ export const columns: ColumnDef<Task>[] = [
     {
         accessorKey: 'title',
         header: 'Titulo',
+        filterFn: 'includesString'
     },
     {
         accessorKey: 'priority',

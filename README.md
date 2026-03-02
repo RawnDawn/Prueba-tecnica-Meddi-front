@@ -4,10 +4,7 @@
 
 Desarrollar una interfaz de usuario para una aplicación web que permita gestionar tareas (CRUD) con las siguientes funcionalidades:
 
-
-
 - Agrupar tareas por prioridad (Una lista por prioridad)
-- Filtrar tareas por fecha de creación
 - Ordenar tareas por fecha de creación
 - Buscar tareas por titulo
 - Mostrar la cantidad de tareas por prioridad (Gráfica de tipo dona, barra, etc.)

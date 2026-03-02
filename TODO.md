@@ -1,6 +1,4 @@
 # TODO
-
-  - filter tasks by date
   - group tasks by prio
   - sort / order tasks by date
   - seach tasks by name

@@ -33,6 +33,7 @@ const props = defineProps<{
 
 const statusFilter = ref("")
 const dateFilter = ref("")
+const titleFilter = ref("")
 
 // Set column filters
 const columnFilters = computed(() => {
@@ -44,6 +45,10 @@ const columnFilters = computed(() => {
 
     if (dateFilter.value) {
         filters.push({ id: "dueDate", value: dateFilter.value });
+    }
+
+    if (titleFilter.value) {
+        filters.push({ id: "title", value: titleFilter.value });
     }
 
     return filters;
@@ -65,6 +70,11 @@ const table = useVueTable({
 
 <template>
     <div class="flex gap-4">
+        <!-- Filter by title -->
+        <div>
+            <Input id="title" name="title" v-model="titleFilter" placeholder="Buscar por título" />
+        </div>
+
         <!-- Filter by status -->
         <Select default-value="" v-model="statusFilter">
             <SelectTrigger>
@@ -81,6 +91,7 @@ const table = useVueTable({
 
         <!-- Filter by due date -->
         <DuePicker v-model="dateFilter" />
+
     </div>
 
     <div class="border rounded-sm bg-foreground-tertiary bg-[#17181c]">
