@@ -4,8 +4,6 @@
 
 Desarrollar una interfaz de usuario para una aplicación web que permita gestionar tareas (CRUD) con las siguientes funcionalidades:
 
-- Mostrar la cantidad de tareas por prioridad (Gráfica de tipo dona, barra, etc.)
-- Mostrar la cantidad de tareas por estado (Gráfica de tipo dona, barra, etc.)
 - Mostrar ranking de los tres días de la semana con mas tareas CREADAS
 - Mostrar ranking de los tres días de la semana con mas tareas COMPLETADAS
 

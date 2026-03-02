@@ -23,6 +23,7 @@ export interface Task {
     priority: TaskPriority | "low" | "medium" | "high";
     status: TaskStatus;
     dueDate: Date | string;
+    completedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }
